@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, TextInput, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Input } from '@rneui/themed'
 import { firebaseAuth } from '../../firebaseConfig'
 
