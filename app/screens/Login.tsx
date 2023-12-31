@@ -67,11 +67,18 @@ const Login = () => {
 					color='#0000ff'
 				/>
 			) : (
-				<Button
-					title='Login'
-					onPress={() => {}}
-					disabled={email.length === 0 || password.length === 0}
-				/>
+				<>
+					<Button
+						title='Login'
+						onPress={signIn}
+						disabled={email.length === 0 || password.length === 0}
+					/>
+					<Button
+						title='Create account'
+						onPress={signUp}
+						disabled={email.length === 0 || password.length === 0}
+					/>
+				</>
 			)}
 		</View>
 	)
