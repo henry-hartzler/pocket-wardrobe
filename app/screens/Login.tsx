@@ -1,14 +1,49 @@
 import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
-import { Input } from '@rneui/themed'
+import { View, StyleSheet, ActivityIndicator } from 'react-native'
+import { Input, Button } from '@rneui/themed'
 import { firebaseAuth } from '../../firebaseConfig'
+import {
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+} from 'firebase/auth'
 
 const Login = () => {
-	const [email, setEmail] = useState<string | undefined>(undefined)
-	const [password, setPassword] = useState<string | undefined>(undefined)
-	const [loading, setLoading] = useState<string | undefined>(undefined)
+	const [email, setEmail] = useState<string>('')
+	const [password, setPassword] = useState<string>('')
+	const [loading, setLoading] = useState<boolean>(false)
 
 	const auth = firebaseAuth
+
+	const signIn = async () => {
+		setLoading(true)
+		try {
+			const response = await signInWithEmailAndPassword(auth, email, password)
+			console.log(response)
+		} catch (error: any) {
+			console.log(error)
+			alert(`Sign in failed: ${error.message}`)
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const signUp = async () => {
+		setLoading(true)
+		try {
+			const response = await createUserWithEmailAndPassword(
+				auth,
+				email,
+				password
+			)
+			alert('Check your e-mail')
+			console.log(response)
+		} catch (error: any) {
+			console.log(error)
+			alert(`Sign up failed: ${error.message}`)
+		} finally {
+			setLoading(false)
+		}
+	}
 
 	return (
 		<View style={styles.container}>
@@ -25,6 +60,19 @@ const Login = () => {
 				secureTextEntry={true}
 				onChangeText={(text) => setPassword(text)}
 			/>
+
+			{loading ? (
+				<ActivityIndicator
+					size='large'
+					color='#0000ff'
+				/>
+			) : (
+				<Button
+					title='Login'
+					onPress={() => {}}
+					disabled={email.length === 0 || password.length === 0}
+				/>
+			)}
 		</View>
 	)
 }
