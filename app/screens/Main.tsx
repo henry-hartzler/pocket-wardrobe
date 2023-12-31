@@ -2,7 +2,7 @@ import { StyleSheet, View, Platform } from 'react-native'
 import Constants from 'expo-constants'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Icon } from 'react-native-elements'
+import { Icon } from '@rneui/themed'
 
 import { useEffect } from 'react'
 import Login from './Login'
