@@ -6,7 +6,7 @@ import {
 	KeyboardAvoidingView,
 } from 'react-native'
 import { Input, Button } from '@rneui/themed'
-import { firebaseAuth } from '../../firebaseConfig'
+import { firebaseAuth } from '../firebaseConfig'
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
