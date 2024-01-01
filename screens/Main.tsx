@@ -9,6 +9,8 @@ import Login from './Login'
 import RandomOutfit from './RandomOutfit'
 import { firebaseAuth } from '../firebaseConfig'
 import Profile from './Profile'
+import AddNewOutfit from './AddNewOutfit'
+import Wardrobe from './Wardrobe'
 
 const Tab = createBottomTabNavigator()
 
@@ -42,6 +44,22 @@ const HomeTabs = () => {
 				}}
 			/>
 			<Tab.Screen
+				name='Add New Outfit'
+				component={AddNewOutfit}
+				options={{
+					title: 'Add New Outfit',
+					tabBarIcon: ({ focused }) => (
+						<Icon
+							name={focused ? 'add-circle' : 'add-circle-outline'}
+							type='material'
+							size={24}
+							iconStyle={{ width: 24 }}
+							color={styles.mainFooter.color}
+						/>
+					),
+				}}
+			/>
+			<Tab.Screen
 				name='Random Outfit'
 				component={RandomOutfit}
 				options={{
@@ -50,6 +68,22 @@ const HomeTabs = () => {
 						<Icon
 							name={focused ? 'shuffle-on' : 'shuffle'}
 							type='material'
+							size={24}
+							iconStyle={{ width: 24 }}
+							color={styles.mainFooter.color}
+						/>
+					),
+				}}
+			/>
+			<Tab.Screen
+				name='Wardrobe'
+				component={Wardrobe}
+				options={{
+					title: 'Wardrobe',
+					tabBarIcon: ({ focused }) => (
+						<Icon
+							name={focused ? 'view-grid' : 'view-grid-outline'}
+							type='material-community'
 							size={24}
 							iconStyle={{ width: 24 }}
 							color={styles.mainFooter.color}
