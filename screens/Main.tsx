@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import Login from './Login'
 import RandomOutfit from './RandomOutfit'
 import { firebaseAuth } from '../firebaseConfig'
+import Profile from './Profile'
 
 const Tab = createBottomTabNavigator()
 
@@ -22,17 +23,33 @@ const HomeTabs = () => {
 				tabBarShowLabel: false,
 				headerShown: false,
 			}}
-			initialRouteName='RandomOutfit'
+			initialRouteName='Random Outfit'
 		>
 			<Tab.Screen
-				name='To Do'
+				name='Profile'
+				component={Profile}
+				options={{
+					title: 'Profile',
+					tabBarIcon: ({ focused }) => (
+						<Icon
+							name={focused ? 'account-circle' : 'account-circle-outline'}
+							type='material-community'
+							size={24}
+							iconStyle={{ width: 24 }}
+							color={styles.mainFooter.color}
+						/>
+					),
+				}}
+			/>
+			<Tab.Screen
+				name='Random Outfit'
 				component={RandomOutfit}
 				options={{
 					title: 'Random Outfit',
-					tabBarIcon: () => (
+					tabBarIcon: ({ focused }) => (
 						<Icon
-							name='random'
-							type='font-awesome'
+							name={focused ? 'shuffle-on' : 'shuffle'}
+							type='material'
 							size={24}
 							iconStyle={{ width: 24 }}
 							color={styles.mainFooter.color}
