@@ -10,7 +10,6 @@ import RandomOutfit from './RandomOutfit'
 import { firebaseAuth } from '../firebaseConfig'
 import Profile from './Profile'
 import AddNewOutfit from './AddNewOutfit'
-import Wardrobe from './Wardrobe'
 
 const Tab = createBottomTabNavigator()
 
@@ -28,14 +27,14 @@ const HomeTabs = () => {
 			initialRouteName='Random Outfit'
 		>
 			<Tab.Screen
-				name='Profile'
-				component={Profile}
+				name='Random Outfit'
+				component={RandomOutfit}
 				options={{
-					title: 'Profile',
+					title: 'Random Outfit',
 					tabBarIcon: ({ focused }) => (
 						<Icon
-							name={focused ? 'account-circle' : 'account-circle-outline'}
-							type='material-community'
+							name={focused ? 'shuffle-on' : 'shuffle'}
+							type='material'
 							size={24}
 							iconStyle={{ width: 24 }}
 							color={styles.mainFooter.color}
@@ -43,6 +42,7 @@ const HomeTabs = () => {
 					),
 				}}
 			/>
+
 			<Tab.Screen
 				name='Add New Outfit'
 				component={AddNewOutfit}
@@ -59,30 +59,15 @@ const HomeTabs = () => {
 					),
 				}}
 			/>
+
 			<Tab.Screen
-				name='Random Outfit'
-				component={RandomOutfit}
+				name='Profile'
+				component={Profile}
 				options={{
-					title: 'Random Outfit',
+					title: 'Profile',
 					tabBarIcon: ({ focused }) => (
 						<Icon
-							name={focused ? 'shuffle-on' : 'shuffle'}
-							type='material'
-							size={24}
-							iconStyle={{ width: 24 }}
-							color={styles.mainFooter.color}
-						/>
-					),
-				}}
-			/>
-			<Tab.Screen
-				name='Wardrobe'
-				component={Wardrobe}
-				options={{
-					title: 'Wardrobe',
-					tabBarIcon: ({ focused }) => (
-						<Icon
-							name={focused ? 'view-grid' : 'view-grid-outline'}
+							name={focused ? 'account-circle' : 'account-circle-outline'}
 							type='material-community'
 							size={24}
 							iconStyle={{ width: 24 }}
