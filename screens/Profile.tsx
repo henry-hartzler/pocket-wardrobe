@@ -1,16 +1,14 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
-import { NavigationProp } from '@react-navigation/native'
-import { firebaseAuth } from '../../firebaseConfig'
+import { firebaseAuth } from '../firebaseConfig'
 import { Button } from '@rneui/themed'
+import { RouterProps } from '../types'
 
-interface RouterProps {
-	navigation: NavigationProp<any, any>
-}
-const RandomOutfit = ({ navigation }: RouterProps) => {
+
+const Profile = ({ navigation }: RouterProps) => {
 	return (
 		<View style={styles.container}>
-			<Text>RandomOutfit</Text>
+			<Text>Profile</Text>
 			<Button
 				onPress={() => firebaseAuth.signOut()}
 				title='Logout'
@@ -27,4 +25,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default RandomOutfit
+export default Profile
