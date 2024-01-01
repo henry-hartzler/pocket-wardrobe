@@ -2,11 +2,12 @@ import { StyleSheet, View, Platform } from 'react-native'
 import Constants from 'expo-constants'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Icon } from 'react-native-elements'
-
-import { useEffect } from 'react'
+import { Icon } from '@rneui/themed'
+import { User, onAuthStateChanged } from 'firebase/auth'
+import { useEffect, useState } from 'react'
 import Login from './Login'
 import RandomOutfit from './RandomOutfit'
+import { firebaseAuth } from '../../firebaseConfig'
 
 const Tab = createBottomTabNavigator()
 
@@ -47,8 +48,12 @@ const Stack = createNativeStackNavigator()
 
 const Main = () => {
 	//make fetch calls here
+	const [user, setUser] = useState<User | null>(null)
+
 	useEffect(() => {
-		console.log('begin')
+		onAuthStateChanged(firebaseAuth, (user) => {
+			setUser(user)
+		})
 	}, [])
 
 	return (
@@ -64,14 +69,17 @@ const Main = () => {
 				}}
 				initialRouteName='Login'
 			>
-				<Stack.Screen
-					name='Home'
-					component={HomeTabs}
-				/>
-				<Stack.Screen
-					name='Login'
-					component={Login}
-				/>
+				{user ? (
+					<Stack.Screen
+						name='Home'
+						component={HomeTabs}
+					/>
+				) : (
+					<Stack.Screen
+						name='Login'
+						component={Login}
+					/>
+				)}
 			</Stack.Navigator>
 		</View>
 	)
