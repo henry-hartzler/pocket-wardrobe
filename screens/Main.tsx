@@ -7,7 +7,7 @@ import { User, onAuthStateChanged } from 'firebase/auth'
 import { useEffect, useState } from 'react'
 import Login from './Login'
 import RandomOutfit from './RandomOutfit'
-import { firebaseAuth } from '../../firebaseConfig'
+import { firebaseAuth } from '../firebaseConfig'
 
 const Tab = createBottomTabNavigator()
 

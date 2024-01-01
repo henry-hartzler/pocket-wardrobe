@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { NavigationProp } from '@react-navigation/native'
-import { firebaseAuth } from '../../firebaseConfig'
+import { firebaseAuth } from '../firebaseConfig'
 import { Button } from '@rneui/themed'
 
 interface RouterProps {
