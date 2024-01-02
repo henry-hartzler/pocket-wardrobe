@@ -1,21 +1,47 @@
 import React, { useState } from 'react'
+import { View, TouchableWithoutFeedback } from 'react-native'
 import {
-	View,
-	StyleSheet,
-	ActivityIndicator,
-	KeyboardAvoidingView,
-} from 'react-native'
-import { Input, Button } from '@rneui/themed'
+	Button,
+	Input,
+	Layout,
+	StyleService,
+	Text,
+	useStyleSheet,
+	Icon,
+	Spinner,
+} from '@ui-kitten/components'
 import { firebaseAuth } from '../firebaseConfig'
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 } from 'firebase/auth'
+import { KeyboardAvoidingView } from '../extra/thirdParty'
 
 const Login = () => {
 	const [email, setEmail] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
+	const [passwordVisible, setPasswordVisible] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(false)
+
+	const styles = useStyleSheet(themedStyles)
+
+	const PersonIcon = (props: any) => (
+		<Icon
+			name='person'
+			{...props}
+		/>
+	)
+
+	const PasswordIcon = (props: any) => (
+		<TouchableWithoutFeedback
+			onPress={() => setPasswordVisible(!passwordVisible)}
+		>
+			<Icon
+				name={!passwordVisible ? 'eye-off' : 'eye'}
+				{...props}
+			/>
+		</TouchableWithoutFeedback>
+	)
 
 	const auth = firebaseAuth
 
@@ -51,51 +77,117 @@ const Login = () => {
 	}
 
 	return (
-		<View style={styles.container}>
-			<KeyboardAvoidingView behavior='padding'>
-				<Input
-					placeholder='E-mail'
-					autoCapitalize='none'
-					value={email}
-					onChangeText={(text) => setEmail(text)}
-				/>
-				<Input
-					placeholder='Password'
-					autoCapitalize='none'
-					value={password}
-					secureTextEntry={true}
-					onChangeText={(text) => setPassword(text)}
-				/>
-
-				{loading ? (
-					<ActivityIndicator
-						size='large'
-						color='#0000ff'
-					/>
-				) : (
-					<>
-						<Button
-							title='Login'
-							onPress={signIn}
-							disabled={email.length === 0 || password.length === 0}
+		<KeyboardAvoidingView style={styles.container}>
+			<View style={styles.headerContainer}>
+				<Text
+					category='h1'
+					status='control'
+				>
+					Pocket Wardrobe
+				</Text>
+				<Text
+					style={styles.signInLabel}
+					category='s1'
+					status='control'
+				>
+					Sign in to your account
+				</Text>
+			</View>
+			{!loading ? (
+				<>
+					<Layout
+						style={styles.formContainer}
+						level='1'
+					>
+						<Input
+							placeholder='Email'
+							accessoryRight={PersonIcon}
+							value={email}
+							onChangeText={setEmail}
 						/>
-						<Button
-							title='Create account'
-							onPress={signUp}
-							disabled={email.length === 0 || password.length === 0}
+						<Input
+							style={styles.passwordInput}
+							placeholder='Password'
+							accessoryRight={PasswordIcon}
+							value={password}
+							secureTextEntry={!passwordVisible}
+							onChangeText={setPassword}
 						/>
-					</>
-				)}
-			</KeyboardAvoidingView>
-		</View>
+						<View style={styles.forgotPasswordContainer}>
+							<Button
+								style={styles.forgotPasswordButton}
+								appearance='ghost'
+								status='basic'
+								onPress={() => alert('add forgot password function')}
+							>
+								Forgot your password?
+							</Button>
+						</View>
+					</Layout>
+					<Button
+						style={styles.signInButton}
+						size='giant'
+						onPress={signIn}
+					>
+						SIGN IN
+					</Button>
+					<Button
+						style={styles.signUpButton}
+						appearance='ghost'
+						status='basic'
+						onPress={() => alert('add sign up page')}
+					>
+						Don't have an account? Create
+					</Button>
+				</>
+			) : (
+				<View style={styles.loadingSpinner}>
+					<Spinner size='giant' />
+				</View>
+			)}
+		</KeyboardAvoidingView>
 	)
 }
 
-const styles = StyleSheet.create({
+const themedStyles = StyleService.create({
 	container: {
-		marginHorizontal: 20,
+		backgroundColor: 'background-basic-color-1',
+	},
+	headerContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		minHeight: 216,
+		backgroundColor: 'color-primary-default',
+	},
+	formContainer: {
+		flex: 1,
+		paddingTop: 32,
+		paddingHorizontal: 16,
+	},
+	signInLabel: {
+		marginTop: 16,
+	},
+	signInButton: {
+		marginHorizontal: 16,
+	},
+	signUpButton: {
+		marginVertical: 12,
+		marginHorizontal: 16,
+	},
+	forgotPasswordContainer: {
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+	},
+	passwordInput: {
+		marginTop: 16,
+	},
+	forgotPasswordButton: {
+		paddingHorizontal: 0,
+	},
+	loadingSpinner: {
 		flex: 1,
 		justifyContent: 'center',
+		alignItems: 'center',
 	},
 })
 
