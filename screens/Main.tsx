@@ -2,7 +2,12 @@ import { StyleSheet, View, Platform } from 'react-native'
 import Constants from 'expo-constants'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Icon } from '@rneui/themed'
+import {
+	BottomNavigation,
+	BottomNavigationTab,
+	Layout,
+	Text,
+} from '@ui-kitten/components'
 import { User, onAuthStateChanged } from 'firebase/auth'
 import { useEffect, useState } from 'react'
 import Login from './Login'
@@ -10,6 +15,18 @@ import RandomOutfit from './RandomOutfit'
 import { firebaseAuth } from '../firebaseConfig'
 import Profile from './Profile'
 import AddNewOutfit from './AddNewOutfit'
+import { PersonIcon, PlusIcon, ShuffleIcon } from '../icons/EvaIcons'
+
+const BottomTabBar = ({ navigation, state }) => (
+	<BottomNavigation
+		selectedIndex={state.index}
+		onSelect={(index) => navigation.navigate(state.routeNames[index])}
+	>
+		<BottomNavigationTab icon={ShuffleIcon} />
+		<BottomNavigationTab icon={PlusIcon} />
+		<BottomNavigationTab icon={PersonIcon} />
+	</BottomNavigation>
+)
 
 const Tab = createBottomTabNavigator()
 
@@ -17,64 +34,25 @@ const HomeTabs = () => {
 	return (
 		<Tab.Navigator
 			screenOptions={{
-				tabBarStyle: {
-					backgroundColor: styles.mainFooter.backgroundColor,
-				},
-				tabBarActiveTintColor: '#fff',
 				tabBarShowLabel: false,
 				headerShown: false,
 			}}
+			tabBar={(props) => <BottomTabBar {...props} />}
 			initialRouteName='Random Outfit'
 		>
 			<Tab.Screen
 				name='Random Outfit'
 				component={RandomOutfit}
-				options={{
-					title: 'Random Outfit',
-					tabBarIcon: ({ focused }) => (
-						<Icon
-							name={focused ? 'shuffle-on' : 'shuffle'}
-							type='material'
-							size={24}
-							iconStyle={{ width: 24 }}
-							color={styles.mainFooter.color}
-						/>
-					),
-				}}
 			/>
 
 			<Tab.Screen
 				name='Add New Outfit'
 				component={AddNewOutfit}
-				options={{
-					title: 'Add New Outfit',
-					tabBarIcon: ({ focused }) => (
-						<Icon
-							name={focused ? 'add-circle' : 'add-circle-outline'}
-							type='material'
-							size={24}
-							iconStyle={{ width: 24 }}
-							color={styles.mainFooter.color}
-						/>
-					),
-				}}
 			/>
 
 			<Tab.Screen
 				name='Profile'
 				component={Profile}
-				options={{
-					title: 'Profile',
-					tabBarIcon: ({ focused }) => (
-						<Icon
-							name={focused ? 'account-circle' : 'account-circle-outline'}
-							type='material-community'
-							size={24}
-							iconStyle={{ width: 24 }}
-							color={styles.mainFooter.color}
-						/>
-					),
-				}}
 			/>
 		</Tab.Navigator>
 	)
@@ -122,10 +100,8 @@ const Main = () => {
 }
 
 const styles = StyleSheet.create({
-	mainFooter: {
-		backgroundColor: 'white',
-		color: 'black',
-		padding: 100,
+	bottomNavigation: {
+		marginVertical: 8,
 	},
 })
 

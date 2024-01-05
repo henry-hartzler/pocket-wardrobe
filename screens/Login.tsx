@@ -16,6 +16,7 @@ import {
 	signInWithEmailAndPassword,
 } from 'firebase/auth'
 import { KeyboardAvoidingView } from '../extra/thirdParty'
+import { PersonIcon } from '../icons/EvaIcons'
 
 const Login = () => {
 	const [email, setEmail] = useState<string>('')
@@ -25,14 +26,7 @@ const Login = () => {
 
 	const styles = useStyleSheet(themedStyles)
 
-	const PersonIcon = (props: any) => (
-		<Icon
-			name='person'
-			{...props}
-		/>
-	)
-
-	const PasswordIcon = (props: any) => (
+	const PasswordIcon = (props) => (
 		<TouchableWithoutFeedback
 			onPress={() => setPasswordVisible(!passwordVisible)}
 		>
