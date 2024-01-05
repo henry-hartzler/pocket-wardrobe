@@ -7,3 +7,17 @@ export const PersonIcon = (props): IconElement => (
 		name='person-outline'
 	/>
 )
+
+export const ShuffleIcon = (props): IconElement => (
+	<Icon
+		{...props}
+		name='shuffle-2-outline'
+	/>
+)
+
+export const PlusIcon = (props): IconElement => (
+	<Icon
+		{...props}
+		name='plus-circle-outline'
+	/>
+)
