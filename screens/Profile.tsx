@@ -1,19 +1,20 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { firebaseAuth } from '../firebaseConfig'
 import { Button } from '@rneui/themed'
 import { RouterProps } from '../types'
+import { Layout } from '@ui-kitten/components'
 
 
 const Profile = ({ navigation }: RouterProps) => {
 	return (
-		<View style={styles.container}>
+		<Layout style={styles.container}>
 			<Text>Profile</Text>
 			<Button
 				onPress={() => firebaseAuth.signOut()}
 				title='Logout'
 			/>
-		</View>
+		</Layout>
 	)
 }
 

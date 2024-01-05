@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet } from 'react-native'
 import React from 'react'
+import { Layout } from '@ui-kitten/components'
 
 const AddNewOutfit = () => {
 	return (
-		<View style={styles.container}>
+		<Layout style={styles.container}>
 			<Text>AddNewOutfit</Text>
-		</View>
+		</Layout>
 	)
 }
 
