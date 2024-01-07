@@ -1,9 +1,9 @@
-import { StyleSheet, SafeAreaView, Alert, View } from 'react-native'
+import { StyleSheet, SafeAreaView, Alert, View, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 import { uploadToFirebaseStorage } from '../firebaseConfig'
 import { uuidv4 } from '@firebase/util'
-import { Button, Text, Icon, Chip } from '@rneui/themed'
+import { Button, Text, Icon, Chip, Divider } from '@rneui/themed'
 
 const seasons = [
 	{
@@ -115,7 +115,8 @@ const AddNewOutfit = () => {
 	//main UI
 	return (
 		<SafeAreaView style={styles.container}>
-			<Text>Add New Outfit</Text>
+			<Text h2>Add New Outfit</Text>
+			<Text h4>#1 Choose a Photo</Text>
 			<View style={styles.buttonsContainer}>
 				<Button
 					title='CAMERA'
@@ -159,6 +160,7 @@ const AddNewOutfit = () => {
 				}}
 				iconRight
 			/>
+			<Text h4>#2 Select Style</Text>
 		</SafeAreaView>
 	)
 }
@@ -168,6 +170,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+		backgroundColor: 'white'
 	},
 	buttonsContainer: {
 		flexDirection: 'row',
