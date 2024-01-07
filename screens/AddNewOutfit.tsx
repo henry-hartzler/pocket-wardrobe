@@ -10,7 +10,7 @@ import {
 	ButtonGroup,
 } from '@ui-kitten/components'
 import * as ImagePicker from 'expo-image-picker'
-import { CameraIcon, GridIcon } from '../icons/EvaIcons'
+import { CameraIcon, ImageIcon } from '../icons/EvaIcons'
 import { uploadToFirebaseStorage } from '../firebaseConfig'
 import { uuidv4 } from '@firebase/util'
 
@@ -80,35 +80,36 @@ const AddNewOutfit = () => {
 		[]
 	)
 
-	//look into combining these checks on one screen?
+	//permissions check
+	const noCameraPermissions =
+		cameraPermission?.status !== ImagePicker.PermissionStatus.GRANTED
+	const noMediaLibraryPermissions =
+		mediaLibraryPermission?.status !== ImagePicker.PermissionStatus.GRANTED
 
-	//camera permission check
-	if (cameraPermission?.status !== ImagePicker.PermissionStatus.GRANTED) {
+	if (noCameraPermissions || noMediaLibraryPermissions) {
 		return (
 			<Layout
 				style={styles.permissionsContainer}
 				level='1'
 			>
 				<SafeAreaView>
-					<Text>Permission Not Granted</Text>
-					<Button onPress={requestCameraPermission}>Request Permission</Button>
-				</SafeAreaView>
-			</Layout>
-		)
-	}
+					{noCameraPermissions && (
+						<>
+							<Text>Camera Permission Not Granted</Text>
+							<Button onPress={requestCameraPermission}>
+								Request Permission
+							</Button>
+						</>
+					)}
 
-	//mediaLibrary permission check
-	if (mediaLibraryPermission?.status !== ImagePicker.PermissionStatus.GRANTED) {
-		return (
-			<Layout
-				style={styles.permissionsContainer}
-				level='1'
-			>
-				<SafeAreaView>
-					<Text>Media Library Permission Not Granted</Text>
-					<Button onPress={requestMediaLibraryPermission}>
-						Request Permission
-					</Button>
+					{noMediaLibraryPermissions && (
+						<>
+							<Text>Media Library Permission Not Granted</Text>
+							<Button onPress={requestMediaLibraryPermission}>
+								Request Permission
+							</Button>
+						</>
+					)}
 				</SafeAreaView>
 			</Layout>
 		)
@@ -130,7 +131,7 @@ const AddNewOutfit = () => {
 						Camera
 					</Button>
 					<Button
-						accessoryLeft={GridIcon}
+						accessoryLeft={ImageIcon}
 						onPress={uploadPhoto}
 					>
 						Photos

@@ -29,11 +29,11 @@ const CameraIcon = (props: any): IconElement => (
 	/>
 )
 
-const GridIcon = (props: any): IconElement => (
+const ImageIcon = (props: any): IconElement => (
 	<Icon
 		{...props}
-		name='grid-outline'
+		name='image-outline'
 	/>
 )
 
-export { PersonIcon, ShuffleIcon, PlusIcon, CameraIcon, GridIcon }
+export { PersonIcon, ShuffleIcon, PlusIcon, CameraIcon, ImageIcon }
