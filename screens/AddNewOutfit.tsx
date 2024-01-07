@@ -25,10 +25,22 @@ const seasons = [
 const AddNewOutfit = () => {
 	const [permission, requestPermission] = ImagePicker.useCameraPermissions()
 
+	const takePhoto = async () => {
+		const cameraResponse = await ImagePicker.launchCameraAsync({
+			allowsEditing: true,
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			quality: 1,
+		})
+
+		if (!cameraResponse.canceled) {
+			console.log(cameraResponse.assets[0].uri)
+		}
+	}
+
 	const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(
 		[]
 	)
-	
+
 	//permission check
 	if (permission?.status !== ImagePicker.PermissionStatus.GRANTED) {
 		return (
@@ -53,7 +65,12 @@ const AddNewOutfit = () => {
 			<SafeAreaView>
 				<Text>Add New Outfit</Text>
 				<ButtonGroup>
-					<Button accessoryLeft={CameraIcon}>Camera</Button>
+					<Button
+						accessoryLeft={CameraIcon}
+						onPress={takePhoto}
+					>
+						Camera
+					</Button>
 					<Button accessoryLeft={GridIcon}>Photos</Button>
 				</ButtonGroup>
 				<Select
