@@ -53,8 +53,6 @@ const AddNewOutfit = () => {
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
-		} finally {
-			setUploadImageSuccess(true)
 		}
 	}
 
@@ -78,8 +76,6 @@ const AddNewOutfit = () => {
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
-		} finally {
-			setUploadImageSuccess(true)
 		}
 	}
 
@@ -161,11 +157,7 @@ const AddNewOutfit = () => {
 						>
 							Photos
 						</Button>
-						<Button
-							accessoryLeft={CheckmarkIcon}
-							appearance='outline'
-							status='success'
-						/>
+						<Button accessoryLeft={CheckmarkIcon} appearance='outline' status='success' />
 					</ButtonGroup>
 				)}
 
