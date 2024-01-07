@@ -36,4 +36,18 @@ const ImageIcon = (props: any): IconElement => (
 	/>
 )
 
-export { PersonIcon, ShuffleIcon, PlusIcon, CameraIcon, ImageIcon }
+const CheckmarkIcon = (props: any): IconElement => (
+	<Icon
+		{...props}
+		name='checkmark-cirlce-2-outline'
+	/>
+)
+
+export {
+	PersonIcon,
+	ShuffleIcon,
+	PlusIcon,
+	CameraIcon,
+	ImageIcon,
+	CheckmarkIcon,
+}

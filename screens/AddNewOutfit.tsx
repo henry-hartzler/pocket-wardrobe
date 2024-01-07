@@ -10,7 +10,7 @@ import {
 	ButtonGroup,
 } from '@ui-kitten/components'
 import * as ImagePicker from 'expo-image-picker'
-import { CameraIcon, ImageIcon } from '../icons/EvaIcons'
+import { CameraIcon, CheckmarkIcon, ImageIcon } from '../icons/EvaIcons'
 import { uploadToFirebaseStorage } from '../firebaseConfig'
 import { uuidv4 } from '@firebase/util'
 
@@ -25,8 +25,11 @@ const seasons = [
 	},
 ]
 const AddNewOutfit = () => {
+	const [uploadImageSuccess, setUploadImageSuccess] = useState<boolean>(false)
+
 	const [cameraPermission, requestCameraPermission] =
 		ImagePicker.useCameraPermissions()
+
 	const [mediaLibraryPermission, requestMediaLibraryPermission] =
 		ImagePicker.useMediaLibraryPermissions()
 
@@ -123,20 +126,41 @@ const AddNewOutfit = () => {
 		>
 			<SafeAreaView>
 				<Text>Add New Outfit</Text>
-				<ButtonGroup>
-					<Button
-						accessoryLeft={CameraIcon}
-						onPress={takePhoto}
-					>
-						Camera
-					</Button>
-					<Button
-						accessoryLeft={ImageIcon}
-						onPress={uploadPhoto}
-					>
-						Photos
-					</Button>
-				</ButtonGroup>
+				{!uploadImageSuccess && (
+					<ButtonGroup>
+						<Button
+							accessoryLeft={CameraIcon}
+							onPress={takePhoto}
+						>
+							Camera
+						</Button>
+						<Button
+							accessoryLeft={ImageIcon}
+							onPress={uploadPhoto}
+						>
+							Photos
+						</Button>
+					</ButtonGroup>
+				)}
+
+				{uploadImageSuccess && (
+					<ButtonGroup>
+						<Button
+							accessoryLeft={CameraIcon}
+							onPress={takePhoto}
+						>
+							Camera
+						</Button>
+						<Button
+							accessoryLeft={ImageIcon}
+							onPress={uploadPhoto}
+						>
+							Photos
+						</Button>
+						<Button accessoryLeft={CheckmarkIcon} appearance='outline' status='success' />
+					</ButtonGroup>
+				)}
+
 				<Select
 					multiSelect={true}
 					selectedIndex={selectedIndex}
