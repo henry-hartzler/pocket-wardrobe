@@ -1,6 +1,12 @@
-import { initializeApp } from 'firebase/app'
+import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
+import {
+	getStorage,
+	ref,
+	uploadBytesResumable,
+	getDownloadURL,
+} from 'firebase/storage'
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyBGWnLgeQLoIHenPJLLr2J491Y2j-zUD5g',
@@ -13,6 +19,51 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-export const firebaseApp = initializeApp(firebaseConfig)
-export const firebaseAuth = getAuth(firebaseApp)
-export const firebaseDb = getFirestore(firebaseApp)
+if (getApps().length === 0) {
+	initializeApp(firebaseConfig)
+}
+
+const firebaseApp = getApp()
+const firebaseAuth = getAuth(firebaseApp)
+const firebaseDb = getFirestore(firebaseApp)
+const firebaseStorage = getStorage(firebaseApp)
+
+const uploadToFirebaseStorage = async (
+	uri: string,
+	fileName: string | null | undefined,
+	onProgress?: any
+) => {
+	const fetchResponse = await fetch(uri)
+	const theBlob = await fetchResponse.blob()
+	const imageRef = ref(firebaseStorage, `outfitImages/${fileName}`)
+	const uploadTask = uploadBytesResumable(imageRef, theBlob)
+
+	return new Promise((resolve, reject) => {
+		uploadTask.on(
+			'state_changed',
+			(snapshot) => {
+				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+				onProgress && onProgress(progress)
+			},
+			(error) => {
+				//Handle unsuccessful uploads
+				reject(error)
+			},
+			async () => {
+				const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref)
+				resolve({
+					downloadUrl,
+					metadata: uploadTask.snapshot.metadata,
+				})
+			}
+		)
+	})
+}
+
+export {
+	firebaseApp,
+	firebaseAuth,
+	firebaseDb,
+	firebaseStorage,
+	uploadToFirebaseStorage,
+}
