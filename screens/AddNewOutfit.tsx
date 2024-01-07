@@ -1,18 +1,9 @@
-import { StyleSheet, SafeAreaView, Alert } from 'react-native'
+import { StyleSheet, SafeAreaView, Alert, View } from 'react-native'
 import React, { useState } from 'react'
-import {
-	Button,
-	IndexPath,
-	Layout,
-	Select,
-	SelectItem,
-	Text,
-	ButtonGroup,
-} from '@ui-kitten/components'
 import * as ImagePicker from 'expo-image-picker'
-import { CameraIcon, CheckmarkIcon, ImageIcon } from '../icons/EvaIcons'
 import { uploadToFirebaseStorage } from '../firebaseConfig'
 import { uuidv4 } from '@firebase/util'
+import { ButtonGroup, Button, Text, Icon } from '@rneui/themed'
 
 const seasons = [
 	{
@@ -79,10 +70,6 @@ const AddNewOutfit = () => {
 		}
 	}
 
-	const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(
-		[]
-	)
-
 	//permissions check
 	const noCameraPermissions =
 		cameraPermission?.status !== ImagePicker.PermissionStatus.GRANTED
@@ -91,113 +78,98 @@ const AddNewOutfit = () => {
 
 	if (noCameraPermissions || noMediaLibraryPermissions) {
 		return (
-			<Layout
-				style={styles.permissionsContainer}
-				level='1'
-			>
-				<SafeAreaView>
-					{noCameraPermissions && (
-						<>
-							<Text>Camera Permission Not Granted</Text>
-							<Button onPress={requestCameraPermission}>
-								Request Permission
-							</Button>
-						</>
-					)}
+			<SafeAreaView style={styles.container}>
+				{noCameraPermissions && (
+					<>
+						<Text>Camera Permission Not Granted</Text>
+						<Button onPress={requestCameraPermission}>
+							Request Permission
+							<Icon
+								name='camera'
+								type='font-awesome'
+							/>
+						</Button>
+					</>
+				)}
 
-					{noMediaLibraryPermissions && (
-						<>
-							<Text>Media Library Permission Not Granted</Text>
-							<Button onPress={requestMediaLibraryPermission}>
-								Request Permission
-							</Button>
-						</>
-					)}
-				</SafeAreaView>
-			</Layout>
+				{noMediaLibraryPermissions && (
+					<>
+						<Text>Media Library Permission Not Granted</Text>
+						<Button onPress={requestMediaLibraryPermission}>
+							Request Permission
+							<Icon
+								name='image'
+								type='font-awesome'
+							/>
+						</Button>
+					</>
+				)}
+			</SafeAreaView>
 		)
 	}
 
 	//main UI
 	return (
-		<Layout
-			style={styles.container}
-			level='1'
-		>
-			<SafeAreaView>
-				<Text>Add New Outfit</Text>
-				{!uploadImageSuccess && (
-					<ButtonGroup>
-						<Button
-							accessoryLeft={CameraIcon}
-							onPress={takePhoto}
-						>
-							Camera
-						</Button>
-						<Button
-							accessoryLeft={ImageIcon}
-							onPress={uploadPhoto}
-						>
-							Photos
-						</Button>
-					</ButtonGroup>
-				)}
-
-				{uploadImageSuccess && (
-					<ButtonGroup>
-						<Button
-							accessoryLeft={CameraIcon}
-							onPress={takePhoto}
-						>
-							Camera
-						</Button>
-						<Button
-							accessoryLeft={ImageIcon}
-							onPress={uploadPhoto}
-						>
-							Photos
-						</Button>
-						<Button accessoryLeft={CheckmarkIcon} appearance='outline' status='success' />
-					</ButtonGroup>
-				)}
-
-				<Select
-					multiSelect={true}
-					selectedIndex={selectedIndex}
-					onSelect={(index) => setSelectedIndex(index)}
-					label='Season'
-					value={
-						selectedIndex[0]?.row === 0 && selectedIndex[1]?.row === 1
-							? 'Summer Winter'
-							: selectedIndex[0]?.row === 0
-							? 'Summer'
-							: selectedIndex[0]?.row === 1
-							? 'Winter'
-							: ''
-					}
-				>
-					{seasons.map((item) => (
-						<SelectItem
-							key={item.name + String(item.id)}
-							title={item.name}
-						/>
-					))}
-				</Select>
-			</SafeAreaView>
-		</Layout>
+		<SafeAreaView style={styles.container}>
+			<Text>Add New Outfit</Text>
+			<View style={styles.buttonsContainer}>
+				<Button
+					title='CAMERA'
+					icon={{
+						name: 'camera',
+						type: 'font-awesome',
+						size: 15,
+						color: 'white',
+					}}
+					iconContainerStyle={styles.iconContainerStyle}
+					titleStyle={styles.titleStyle}
+					buttonStyle={styles.buttonStyle}
+					containerStyle={styles.individualButtonsContainer}
+					onPress={takePhoto}
+				/>
+				<Button
+					title='UPLOAD IMAGE'
+					icon={{
+						name: 'upload',
+						type: 'font-awesome',
+						size: 15,
+						color: 'white',
+					}}
+					iconContainerStyle={styles.iconContainerStyle}
+					titleStyle={styles.titleStyle}
+					buttonStyle={styles.buttonStyle}
+					containerStyle={styles.individualButtonsContainer}
+					onPress={uploadPhoto}
+				/>
+			</View>
+		</SafeAreaView>
 	)
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		minHeight: 128,
-	},
-	permissionsContainer: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		flex: 1,
 	},
+	buttonsContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginHorizontal: 20,
+		marginTop: 5,
+	},
+	individualButtonsContainer: {
+		width: 170,
+		marginHorizontal: 10,
+	},
+	buttonStyle: {
+		backgroundColor: 'blue',
+		borderColor: 'transparent',
+		borderWidth: 0,
+		borderRadius: 30,
+	},
+	iconContainerStyle: { marginRight: 10 },
+	titleStyle: { fontWeight: '700' }
 })
 
 export default AddNewOutfit
