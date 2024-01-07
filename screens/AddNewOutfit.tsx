@@ -116,8 +116,27 @@ const AddNewOutfit = () => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<Text h2>Add New Outfit</Text>
-			<Text h4>#1 Choose a Photo</Text>
-			<View style={styles.buttonsContainer}>
+			<View style={styles.innerContainer}>
+				<Text
+					h4
+					style={{ marginRight: 10 }}
+				>
+					#1 Choose a Photo
+				</Text>
+				<Chip
+					color='green'
+					disabled={!uploadImageSuccess}
+					containerStyle={{ marginVertical: 15 }}
+					icon={{
+						name: 'check',
+						type: 'font-awesome',
+						size: 20,
+						color: 'white',
+					}}
+					iconRight
+				/>
+			</View>
+			<View style={styles.innerContainer}>
 				<Button
 					title='CAMERA'
 					icon={{
@@ -147,20 +166,9 @@ const AddNewOutfit = () => {
 					onPress={uploadPhoto}
 				/>
 			</View>
-			<Chip
-				title='Image Upload Successful'
-				color='green'
-				disabled={!uploadImageSuccess}
-				containerStyle={{ marginVertical: 15 }}
-				icon={{
-					name: 'check',
-					type: 'font-awesome',
-					size: 20,
-					color: 'white',
-				}}
-				iconRight
-			/>
-			<Text h4>#2 Select Style</Text>
+			<View style={styles.innerContainer}>
+				<Text h4>#2 Select Style</Text>
+			</View>
 		</SafeAreaView>
 	)
 }
@@ -170,9 +178,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: 'white'
+		backgroundColor: 'white',
 	},
-	buttonsContainer: {
+	innerContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		marginHorizontal: 20,
