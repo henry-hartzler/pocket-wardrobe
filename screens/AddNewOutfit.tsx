@@ -53,6 +53,29 @@ const AddNewOutfit = () => {
 		}
 	}
 
+	const uploadPhoto = async () => {
+		try {
+			const mediaLibraryResponse = await ImagePicker.launchImageLibraryAsync({
+				allowsEditing: true,
+				mediaTypes: ImagePicker.MediaTypeOptions.Images,
+				quality: 1,
+			})
+
+			if (!mediaLibraryResponse.canceled) {
+				const { uri } = mediaLibraryResponse.assets[0]
+				const fileName = uri.split('/').pop() + uuidv4()
+				const uploadResponse = await uploadToFirebaseStorage(
+					uri,
+					fileName,
+					(v: any) => console.log(v)
+				)
+				console.log(uploadResponse)
+			}
+		} catch (e: any) {
+			Alert.alert(`Error Uploading Image: ${e.message}`)
+		}
+	}
+
 	const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(
 		[]
 	)
@@ -106,7 +129,12 @@ const AddNewOutfit = () => {
 					>
 						Camera
 					</Button>
-					<Button accessoryLeft={GridIcon}>Photos</Button>
+					<Button
+						accessoryLeft={GridIcon}
+						onPress={uploadPhoto}
+					>
+						Photos
+					</Button>
 				</ButtonGroup>
 				<Select
 					multiSelect={true}
