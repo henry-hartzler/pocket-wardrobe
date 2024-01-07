@@ -1,18 +1,42 @@
 import { StyleSheet, SafeAreaView, Alert, View, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 import { uploadToFirebaseStorage } from '../firebaseConfig'
 import { uuidv4 } from '@firebase/util'
-import { Button, Text, Icon, Chip, Divider } from '@rneui/themed'
+import { Button, Text, Icon, Chip } from '@rneui/themed'
+import DropDownPicker from 'react-native-dropdown-picker'
 
 const seasons = [
 	{
-		id: 0,
-		name: 'Summer',
+		label: 'Summer',
+		value: 'summer',
 	},
 	{
-		id: 1,
-		name: 'Winter',
+		label: 'Winter',
+		value: 'winter',
+	},
+	{
+		label: 'All',
+		value: 'all',
+	},
+]
+
+const category = [
+	{
+		label: 'Work',
+		value: 'work',
+	},
+	{
+		label: 'Casual',
+		value: 'casual',
+	},
+	{
+		label: 'Exercise',
+		value: 'exercise',
+	},
+	{
+		label: 'Going Out',
+		value: 'going out',
 	},
 ]
 const AddNewOutfit = () => {
@@ -73,6 +97,23 @@ const AddNewOutfit = () => {
 			setUploadImageSuccess(true)
 		}
 	}
+
+	//dropdown options
+	const [categoryOpen, setCategoryOpen] = useState(false)
+	const [categoryValue, setCategoryValue] = useState(null)
+	const [categoryItems, setCategoryItems] = useState(category)
+
+	const [seasonOpen, setSeasonOpen] = useState(false)
+	const [seasonValue, setSeasonValue] = useState(null)
+	const [seasonItems, setSeasonItems] = useState(seasons)
+
+	const onCategoryOpen = useCallback(() => {
+		setSeasonOpen(false)
+	}, [])
+
+	const onSeasonOpen = useCallback(() => {
+		setCategoryOpen(false)
+	}, [])
 
 	//permissions check
 	const noCameraPermissions =
@@ -166,8 +207,40 @@ const AddNewOutfit = () => {
 					onPress={uploadPhoto}
 				/>
 			</View>
-			<View style={styles.innerContainer}>
-				<Text h4>#2 Select Style</Text>
+
+			<Text h4>#2 Select Style</Text>
+			<View style={styles.dropdownRow}>
+				<Text style={styles.labelText}>Category</Text>
+				<DropDownPicker
+					open={categoryOpen}
+					value={categoryValue}
+					items={categoryItems}
+					setOpen={setCategoryOpen}
+					setValue={setCategoryValue}
+					setItems={setCategoryItems}
+					containerStyle={styles.dropdownContainerStyle}
+					placeholder='Category'
+					zIndex={3000}
+					zIndexInverse={1000}
+					onOpen={onCategoryOpen}
+				/>
+			</View>
+
+			<View style={styles.dropdownRow}>
+				<Text style={styles.labelText}>Season</Text>
+				<DropDownPicker
+					open={seasonOpen}
+					value={seasonValue}
+					items={seasonItems}
+					setOpen={setSeasonOpen}
+					setValue={setSeasonValue}
+					setItems={setSeasonItems}
+					containerStyle={styles.dropdownContainerStyle}
+					placeholder='Season'
+					zIndex={2000}
+					zIndexInverse={2000}
+					onOpen={onSeasonOpen}
+				/>
 			</View>
 		</SafeAreaView>
 	)
@@ -198,6 +271,16 @@ const styles = StyleSheet.create({
 	},
 	iconContainerStyle: { marginRight: 10 },
 	titleStyle: { fontWeight: '700' },
+	dropdownContainerStyle: { width: 200 },
+	dropdownRow: {
+		marginVertical: 10,
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginHorizontal: 20,
+	},
+	labelText: {
+		marginRight: 10,
+	},
 })
 
 export default AddNewOutfit
