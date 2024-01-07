@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 import { uploadToFirebaseStorage } from '../firebaseConfig'
 import { uuidv4 } from '@firebase/util'
-import { ButtonGroup, Button, Text, Icon } from '@rneui/themed'
+import { Button, Text, Icon, Chip } from '@rneui/themed'
 
 const seasons = [
 	{
@@ -44,6 +44,8 @@ const AddNewOutfit = () => {
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
+		} finally {
+			setUploadImageSuccess(true)
 		}
 	}
 
@@ -67,6 +69,8 @@ const AddNewOutfit = () => {
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
+		} finally {
+			setUploadImageSuccess(true)
 		}
 	}
 
@@ -142,6 +146,19 @@ const AddNewOutfit = () => {
 					onPress={uploadPhoto}
 				/>
 			</View>
+			<Chip
+				title='Image Upload Successful'
+				color='green'
+				disabled={!uploadImageSuccess}
+				containerStyle={{ marginVertical: 15 }}
+				icon={{
+					name: 'check',
+					type: 'font-awesome',
+					size: 20,
+					color: 'white',
+				}}
+				iconRight
+			/>
 		</SafeAreaView>
 	)
 }
@@ -169,7 +186,7 @@ const styles = StyleSheet.create({
 		borderRadius: 30,
 	},
 	iconContainerStyle: { marginRight: 10 },
-	titleStyle: { fontWeight: '700' }
+	titleStyle: { fontWeight: '700' },
 })
 
 export default AddNewOutfit
