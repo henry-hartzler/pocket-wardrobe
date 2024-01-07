@@ -28,7 +28,8 @@ const AddNewOutfit = () => {
 	const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(
 		[]
 	)
-
+	
+	//permission check
 	if (permission?.status !== ImagePicker.PermissionStatus.GRANTED) {
 		return (
 			<Layout
@@ -43,6 +44,7 @@ const AddNewOutfit = () => {
 		)
 	}
 
+	//main UI
 	return (
 		<Layout
 			style={styles.container}
