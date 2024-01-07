@@ -25,7 +25,10 @@ const seasons = [
 	},
 ]
 const AddNewOutfit = () => {
-	const [permission, requestPermission] = ImagePicker.useCameraPermissions()
+	const [cameraPermission, requestCameraPermission] =
+		ImagePicker.useCameraPermissions()
+	const [mediaLibraryPermission, requestMediaLibraryPermission] =
+		ImagePicker.useMediaLibraryPermissions()
 
 	const takePhoto = async () => {
 		try {
@@ -54,8 +57,10 @@ const AddNewOutfit = () => {
 		[]
 	)
 
-	//permission check
-	if (permission?.status !== ImagePicker.PermissionStatus.GRANTED) {
+	//look into combining these checks on one screen?
+
+	//camera permission check
+	if (cameraPermission?.status !== ImagePicker.PermissionStatus.GRANTED) {
 		return (
 			<Layout
 				style={styles.permissionsContainer}
@@ -63,7 +68,24 @@ const AddNewOutfit = () => {
 			>
 				<SafeAreaView>
 					<Text>Permission Not Granted</Text>
-					<Button onPress={requestPermission}>Request Permission</Button>
+					<Button onPress={requestCameraPermission}>Request Permission</Button>
+				</SafeAreaView>
+			</Layout>
+		)
+	}
+
+	//mediaLibrary permission check
+	if (mediaLibraryPermission?.status !== ImagePicker.PermissionStatus.GRANTED) {
+		return (
+			<Layout
+				style={styles.permissionsContainer}
+				level='1'
+			>
+				<SafeAreaView>
+					<Text>Media Library Permission Not Granted</Text>
+					<Button onPress={requestMediaLibraryPermission}>
+						Request Permission
+					</Button>
 				</SafeAreaView>
 			</Layout>
 		)
