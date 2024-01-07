@@ -36,10 +36,12 @@ const AddNewOutfit = () => {
 			})
 
 			if (!cameraResponse.canceled) {
-				const { uri, fileName } = cameraResponse.assets[0]
+				const { uri } = cameraResponse.assets[0]
+				const fileName = uri.split('/').pop() + uuidv4()
 				const uploadResponse = await uploadToFirebaseStorage(
 					uri,
-					fileName + uuidv4()
+					fileName,
+					(v: any) => console.log(v)
 				)
 				console.log(uploadResponse)
 			}
