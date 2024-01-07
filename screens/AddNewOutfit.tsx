@@ -1,4 +1,4 @@
-import { Text, StyleSheet, SafeAreaView } from 'react-native'
+import { StyleSheet, SafeAreaView } from 'react-native'
 import React, { useState } from 'react'
 import {
 	Button,
@@ -6,6 +6,7 @@ import {
 	Layout,
 	Select,
 	SelectItem,
+	Text,
 } from '@ui-kitten/components'
 import * as ImagePicker from 'expo-image-picker'
 
@@ -33,7 +34,7 @@ const AddNewOutfit = () => {
 				level='1'
 			>
 				<SafeAreaView>
-					<Text>Permission Not Granted - {permission?.status} </Text>
+					<Text>Permission Not Granted</Text>
 					<Button onPress={requestPermission}>Request Permission</Button>
 				</SafeAreaView>
 			</Layout>
