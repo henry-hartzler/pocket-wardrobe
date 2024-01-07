@@ -1,6 +1,13 @@
 import { Text, StyleSheet, SafeAreaView } from 'react-native'
 import React, { useState } from 'react'
-import { IndexPath, Layout, Select, SelectItem } from '@ui-kitten/components'
+import {
+	Button,
+	IndexPath,
+	Layout,
+	Select,
+	SelectItem,
+} from '@ui-kitten/components'
+import * as ImagePicker from 'expo-image-picker'
 
 const seasons = [
 	{
@@ -13,9 +20,25 @@ const seasons = [
 	},
 ]
 const AddNewOutfit = () => {
+	const [permission, requestPermission] = ImagePicker.useCameraPermissions()
+
 	const [selectedIndex, setSelectedIndex] = useState<IndexPath | IndexPath[]>(
 		[]
 	)
+
+	if (permission?.status !== ImagePicker.PermissionStatus.GRANTED) {
+		return (
+			<Layout
+				style={styles.permissionsContainer}
+				level='1'
+			>
+				<SafeAreaView>
+					<Text>Permission Not Granted - {permission?.status} </Text>
+					<Button onPress={requestPermission}>Request Permission</Button>
+				</SafeAreaView>
+			</Layout>
+		)
+	}
 
 	return (
 		<Layout
@@ -55,6 +78,11 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		minHeight: 128,
+	},
+	permissionsContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		flex: 1,
 	},
 })
 
