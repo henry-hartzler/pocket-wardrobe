@@ -7,8 +7,10 @@ import {
 	Select,
 	SelectItem,
 	Text,
+	ButtonGroup,
 } from '@ui-kitten/components'
 import * as ImagePicker from 'expo-image-picker'
+import { CameraIcon, GridIcon } from '../icons/EvaIcons'
 
 const seasons = [
 	{
@@ -48,6 +50,10 @@ const AddNewOutfit = () => {
 		>
 			<SafeAreaView>
 				<Text>Add New Outfit</Text>
+				<ButtonGroup>
+					<Button accessoryLeft={CameraIcon}>Camera</Button>
+					<Button accessoryLeft={GridIcon}>Photos</Button>
+				</ButtonGroup>
 				<Select
 					multiSelect={true}
 					selectedIndex={selectedIndex}
