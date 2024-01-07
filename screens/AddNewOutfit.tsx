@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView } from 'react-native'
+import { StyleSheet, SafeAreaView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import {
 	Button,
@@ -11,6 +11,8 @@ import {
 } from '@ui-kitten/components'
 import * as ImagePicker from 'expo-image-picker'
 import { CameraIcon, GridIcon } from '../icons/EvaIcons'
+import { uploadToFirebaseStorage } from '../firebaseConfig'
+import { uuidv4 } from '@firebase/util'
 
 const seasons = [
 	{
@@ -26,14 +28,23 @@ const AddNewOutfit = () => {
 	const [permission, requestPermission] = ImagePicker.useCameraPermissions()
 
 	const takePhoto = async () => {
-		const cameraResponse = await ImagePicker.launchCameraAsync({
-			allowsEditing: true,
-			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			quality: 1,
-		})
+		try {
+			const cameraResponse = await ImagePicker.launchCameraAsync({
+				allowsEditing: true,
+				mediaTypes: ImagePicker.MediaTypeOptions.Images,
+				quality: 1,
+			})
 
-		if (!cameraResponse.canceled) {
-			console.log(cameraResponse.assets[0].uri)
+			if (!cameraResponse.canceled) {
+				const { uri, fileName } = cameraResponse.assets[0]
+				const uploadResponse = await uploadToFirebaseStorage(
+					uri,
+					fileName + uuidv4()
+				)
+				console.log(uploadResponse)
+			}
+		} catch (e: any) {
+			Alert.alert(`Error Uploading Image: ${e.message}`)
 		}
 	}
 
