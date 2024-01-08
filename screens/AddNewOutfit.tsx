@@ -342,8 +342,8 @@ const AddNewOutfit = () => {
 					setItems={setCategoryItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={1000}
-					zIndexInverse={6000}
+					zIndex={6000}
+					zIndexInverse={1000}
 					onOpen={onCategoryOpen}
 				/>
 			</View>
