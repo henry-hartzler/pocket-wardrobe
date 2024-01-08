@@ -80,11 +80,10 @@ const AddNewOutfit = () => {
 				)
 				console.log(uploadResponse)
 				setImgPath(fileName)
+				setUploadImageSuccess(true)
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
-		} finally {
-			setUploadImageSuccess(true)
 		}
 	}
 
@@ -106,11 +105,10 @@ const AddNewOutfit = () => {
 				)
 				console.log(uploadResponse)
 				setImgPath(fileName)
+				setUploadImageSuccess(true)
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
-		} finally {
-			setUploadImageSuccess(true)
 		}
 	}
 
@@ -199,16 +197,6 @@ const AddNewOutfit = () => {
 		img: imgPath,
 		userId: currentUserId,
 	}
-
-	const allOptionsHaveValues: boolean | null =
-		categoryValue &&
-		seasonValue &&
-		blazerValue &&
-		cardiganValue &&
-		topValue &&
-		pantsValue &&
-		imgPath &&
-		currentUserId
 
 	const [loading, setLoading] = useState<boolean>(false)
 
@@ -331,7 +319,15 @@ const AddNewOutfit = () => {
 			</View>
 
 			<Text h4>#2 Select Style</Text>
-			<View style={styles.dropdownRow}>
+			<View
+				style={{
+					marginVertical: 10,
+					flexDirection: 'row',
+					alignItems: 'center',
+					marginHorizontal: 20,
+					zIndex: categoryOpen ? 1 : 0,
+				}}
+			>
 				<Text style={styles.labelText}>Category</Text>
 				<DropDownPicker
 					open={categoryOpen}
@@ -342,13 +338,19 @@ const AddNewOutfit = () => {
 					setItems={setCategoryItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={6000}
-					zIndexInverse={1000}
 					onOpen={onCategoryOpen}
 				/>
 			</View>
 
-			<View style={styles.dropdownRow}>
+			<View
+				style={{
+					marginVertical: 10,
+					flexDirection: 'row',
+					alignItems: 'center',
+					marginHorizontal: 20,
+					zIndex: seasonOpen ? 1 : 0,
+				}}
+			>
 				<Text style={styles.labelText}>Season</Text>
 				<DropDownPicker
 					open={seasonOpen}
@@ -359,13 +361,19 @@ const AddNewOutfit = () => {
 					setItems={setSeasonItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={5000}
-					zIndexInverse={2000}
 					onOpen={onSeasonOpen}
 				/>
 			</View>
 
-			<View style={styles.dropdownRow}>
+			<View
+				style={{
+					marginVertical: 10,
+					flexDirection: 'row',
+					alignItems: 'center',
+					marginHorizontal: 20,
+					zIndex: blazerOpen ? 1 : 0,
+				}}
+			>
 				<Text style={styles.labelText}>Blazer</Text>
 				<DropDownPicker
 					open={blazerOpen}
@@ -376,13 +384,19 @@ const AddNewOutfit = () => {
 					setItems={setBlazerItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={4000}
-					zIndexInverse={3000}
 					onOpen={onBlazerOpen}
 				/>
 			</View>
 
-			<View style={styles.dropdownRow}>
+			<View
+				style={{
+					marginVertical: 10,
+					flexDirection: 'row',
+					alignItems: 'center',
+					marginHorizontal: 20,
+					zIndex: cardiganOpen ? 1 : 0,
+				}}
+			>
 				<Text style={styles.labelText}>Cardigan</Text>
 				<DropDownPicker
 					open={cardiganOpen}
@@ -393,13 +407,19 @@ const AddNewOutfit = () => {
 					setItems={setCardiganItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={3000}
-					zIndexInverse={4000}
 					onOpen={onCardiganOpen}
 				/>
 			</View>
 
-			<View style={styles.dropdownRow}>
+			<View
+				style={{
+					marginVertical: 10,
+					flexDirection: 'row',
+					alignItems: 'center',
+					marginHorizontal: 20,
+					zIndex: topOpen ? 1 : 0,
+				}}
+			>
 				<Text style={styles.labelText}>Top</Text>
 				<DropDownPicker
 					open={topOpen}
@@ -410,13 +430,19 @@ const AddNewOutfit = () => {
 					setItems={setTopItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={2000}
-					zIndexInverse={5000}
 					onOpen={onTopOpen}
 				/>
 			</View>
 
-			<View style={styles.dropdownRow}>
+			<View
+				style={{
+					marginVertical: 10,
+					flexDirection: 'row',
+					alignItems: 'center',
+					marginHorizontal: 20,
+					zIndex: pantsOpen ? 1 : 0,
+				}}
+			>
 				<Text style={styles.labelText}>Pants</Text>
 				<DropDownPicker
 					open={pantsOpen}
@@ -427,8 +453,6 @@ const AddNewOutfit = () => {
 					setItems={setPantsItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={1000}
-					zIndexInverse={6000}
 					onOpen={onPantsOpen}
 				/>
 			</View>
@@ -445,7 +469,7 @@ const AddNewOutfit = () => {
 				titleStyle={styles.titleStyle}
 				buttonStyle={styles.buttonStyle}
 				containerStyle={{ width: 230, marginHorizontal: 10 }}
-				disabled={!allOptionsHaveValues || loading}
+				disabled={loading}
 				loading={loading}
 				onPress={() => (setLoading(true), uploadNewOutfit())}
 			/>
@@ -480,12 +504,6 @@ const styles = StyleSheet.create({
 	iconContainerStyle: { marginRight: 10 },
 	titleStyle: { fontWeight: '700' },
 	dropdownContainerStyle: { width: 200 },
-	dropdownRow: {
-		marginVertical: 10,
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginHorizontal: 20,
-	},
 	labelText: {
 		marginRight: 10,
 	},
