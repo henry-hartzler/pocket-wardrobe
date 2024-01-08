@@ -80,11 +80,10 @@ const AddNewOutfit = () => {
 				)
 				console.log(uploadResponse)
 				setImgPath(fileName)
+				setUploadImageSuccess(true)
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
-		} finally {
-			setUploadImageSuccess(true)
 		}
 	}
 
@@ -106,11 +105,10 @@ const AddNewOutfit = () => {
 				)
 				console.log(uploadResponse)
 				setImgPath(fileName)
+				setUploadImageSuccess(true)
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
-		} finally {
-			setUploadImageSuccess(true)
 		}
 	}
 
