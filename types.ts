@@ -4,12 +4,13 @@ export type RouterProps = {
 	navigation: NavigationProp<any, any>
 }
 
-export type Fit = {
-	pants: string | undefined
-	top: string | undefined
-	blazer: string | undefined
-	cardigan: string | undefined
-	summer: boolean | undefined
-	winter: boolean | undefined
-	img: string | undefined
+export type Outfit = {
+	category: string | undefined | null
+	season: string[] | undefined | null
+	blazer: string | undefined | null
+	cardigan: string | undefined | null
+	top: string | undefined | null
+	pants: string | undefined | null
+	img: string | undefined | null
+	userId: string | undefined | null
 }
