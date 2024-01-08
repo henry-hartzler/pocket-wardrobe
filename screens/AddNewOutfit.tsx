@@ -5,6 +5,7 @@ import { uploadToFirebaseStorage } from '../firebaseConfig'
 import { uuidv4 } from '@firebase/util'
 import { Button, Text, Icon, Chip } from '@rneui/themed'
 import DropDownPicker, { ItemType, ValueType } from 'react-native-dropdown-picker'
+import { Outfit } from '../types'
 
 const makeOptions = (strArr: string[]): ItemType<ValueType>[] => {
 	const arrOfDropObj: ItemType<ValueType>[] = [{ label: 'select', value: undefined }]
@@ -172,6 +173,17 @@ const AddNewOutfit = () => {
 		setCardiganOpen(false)
 		setTopOpen(false)
 	}, [])
+
+	const outfitToUpload: Outfit = {
+		category: categoryValue,
+		season: seasonValue,
+		blazer: blazerValue,
+		cardigan: cardiganValue,
+		top: topValue,
+		pants: pantsValue,
+		img: undefined,
+		userId: undefined
+	}
 
 	//permissions check
 	const noCameraPermissions =

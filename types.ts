@@ -5,12 +5,12 @@ export type RouterProps = {
 }
 
 export type Outfit = {
-	category: string | undefined
-	season: string[] | undefined
-	blazer: string | undefined
-	cardigan: string | undefined
-	top: string | undefined
-	pants: string | undefined
-	img: string | undefined
-	userId: string | undefined
+	category: string | undefined | null
+	season: string[] | undefined | null
+	blazer: string | undefined | null
+	cardigan: string | undefined | null
+	top: string | undefined | null
+	pants: string | undefined | null
+	img: string | undefined | null
+	userId: string | undefined | null
 }
