@@ -1,14 +1,24 @@
-import { StyleSheet, SafeAreaView, Alert, View, ScrollView } from 'react-native'
 import React, { useCallback, useState } from 'react'
+import { StyleSheet, SafeAreaView, Alert, View } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
-import { uploadToFirebaseStorage } from '../firebaseConfig'
+import {
+	firebaseDb,
+	uploadToFirebaseStorage,
+	firebaseAuth,
+} from '../firebaseConfig'
+import { collection, addDoc } from 'firebase/firestore'
 import { uuidv4 } from '@firebase/util'
 import { Button, Text, Icon, Chip } from '@rneui/themed'
-import DropDownPicker, { ItemType, ValueType } from 'react-native-dropdown-picker'
+import DropDownPicker, {
+	ItemType,
+	ValueType,
+} from 'react-native-dropdown-picker'
 import { Outfit } from '../types'
 
 const makeOptions = (strArr: string[]): ItemType<ValueType>[] => {
-	const arrOfDropObj: ItemType<ValueType>[] = [{ label: 'select', value: undefined }]
+	const arrOfDropObj: ItemType<ValueType>[] = [
+		{ label: 'select', value: undefined },
+	]
 	strArr.forEach((item) => arrOfDropObj.push({ label: item, value: item }))
 	return arrOfDropObj
 }
@@ -27,7 +37,7 @@ const topArr = [
 	'grey',
 	'rust',
 ]
-const seasonsArr = ['summer', 'winter', 'all']
+const seasonsArr = ['summer', 'winter', 'any']
 const categoryArr = ['work', 'exercise', 'casual', 'going out']
 
 const pantsOptions = makeOptions(pantsArr)
@@ -44,6 +54,7 @@ const categoryOptions = makeOptions(categoryArr)
 
 const AddNewOutfit = () => {
 	const [uploadImageSuccess, setUploadImageSuccess] = useState<boolean>(false)
+	const [imgPath, setImgPath] = useState<string | undefined>(undefined)
 
 	const [cameraPermission, requestCameraPermission] =
 		ImagePicker.useCameraPermissions()
@@ -68,6 +79,7 @@ const AddNewOutfit = () => {
 					(v: any) => console.log(v)
 				)
 				console.log(uploadResponse)
+				setImgPath(fileName)
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
@@ -93,6 +105,7 @@ const AddNewOutfit = () => {
 					(v: any) => console.log(v)
 				)
 				console.log(uploadResponse)
+				setImgPath(fileName)
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
@@ -174,6 +187,8 @@ const AddNewOutfit = () => {
 		setTopOpen(false)
 	}, [])
 
+	const currentUserId = firebaseAuth.currentUser?.uid
+
 	const outfitToUpload: Outfit = {
 		category: categoryValue,
 		season: seasonValue,
@@ -181,8 +196,46 @@ const AddNewOutfit = () => {
 		cardigan: cardiganValue,
 		top: topValue,
 		pants: pantsValue,
-		img: undefined,
-		userId: undefined
+		img: imgPath,
+		userId: currentUserId,
+	}
+
+	const allOptionsHaveValues: boolean | null =
+		categoryValue &&
+		seasonValue &&
+		blazerValue &&
+		cardiganValue &&
+		topValue &&
+		pantsValue &&
+		imgPath &&
+		currentUserId
+
+	const [loading, setLoading] = useState<boolean>(false)
+
+	const resetOptions = () => {
+		setCategoryValue(null)
+		setSeasonValue(null)
+		setBlazerValue(null)
+		setCardiganValue(null)
+		setTopValue(null)
+		setPantsValue(null)
+		setImgPath(undefined)
+		setUploadImageSuccess(false)
+	}
+
+	const uploadNewOutfit = async () => {
+		try {
+			const docRef = await addDoc(
+				collection(firebaseDb, 'outfits'),
+				outfitToUpload
+			)
+			Alert.alert('Outfit Upload Success!')
+		} catch (e: any) {
+			Alert.alert('Error adding document: ', e)
+		} finally {
+			setLoading(false)
+			resetOptions()
+		}
 	}
 
 	//permissions check
@@ -226,7 +279,6 @@ const AddNewOutfit = () => {
 	//main UI
 	return (
 		<SafeAreaView style={styles.container}>
-			<Text h2>Add New Outfit</Text>
 			<View style={styles.innerContainer}>
 				<Text
 					h4
@@ -380,6 +432,23 @@ const AddNewOutfit = () => {
 					onOpen={onPantsOpen}
 				/>
 			</View>
+
+			<Button
+				title='UPLOAD NEW OUTFIT'
+				icon={{
+					name: 'upload',
+					type: 'font-awesome',
+					size: 15,
+					color: 'white',
+				}}
+				iconContainerStyle={styles.iconContainerStyle}
+				titleStyle={styles.titleStyle}
+				buttonStyle={styles.buttonStyle}
+				containerStyle={{ width: 230, marginHorizontal: 10 }}
+				disabled={!allOptionsHaveValues || loading}
+				loading={loading}
+				onPress={() => (setLoading(true), uploadNewOutfit())}
+			/>
 		</SafeAreaView>
 	)
 }
