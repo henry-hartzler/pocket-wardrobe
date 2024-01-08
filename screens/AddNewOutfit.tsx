@@ -200,16 +200,6 @@ const AddNewOutfit = () => {
 		userId: currentUserId,
 	}
 
-	const allOptionsHaveValues: boolean | null =
-		categoryValue &&
-		seasonValue &&
-		blazerValue &&
-		cardiganValue &&
-		topValue &&
-		pantsValue &&
-		imgPath &&
-		currentUserId
-
 	const [loading, setLoading] = useState<boolean>(false)
 
 	const resetOptions = () => {
@@ -481,7 +471,7 @@ const AddNewOutfit = () => {
 				titleStyle={styles.titleStyle}
 				buttonStyle={styles.buttonStyle}
 				containerStyle={{ width: 230, marginHorizontal: 10 }}
-				disabled={!allOptionsHaveValues || loading}
+				disabled={loading}
 				loading={loading}
 				onPress={() => (setLoading(true), uploadNewOutfit())}
 			/>
