@@ -65,7 +65,7 @@ const AddNewOutfit = () => {
 	const takePhoto = async () => {
 		try {
 			const cameraResponse = await ImagePicker.launchCameraAsync({
-				allowsEditing: true,
+				allowsEditing: false,
 				mediaTypes: ImagePicker.MediaTypeOptions.Images,
 				quality: 1,
 			})
@@ -91,7 +91,7 @@ const AddNewOutfit = () => {
 	const uploadPhoto = async () => {
 		try {
 			const mediaLibraryResponse = await ImagePicker.launchImageLibraryAsync({
-				allowsEditing: true,
+				allowsEditing: false,
 				mediaTypes: ImagePicker.MediaTypeOptions.Images,
 				quality: 1,
 			})
@@ -459,6 +459,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: 'white',
+		padding: 20,
 	},
 	innerContainer: {
 		flexDirection: 'row',
