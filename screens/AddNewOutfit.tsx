@@ -4,41 +4,43 @@ import * as ImagePicker from 'expo-image-picker'
 import { uploadToFirebaseStorage } from '../firebaseConfig'
 import { uuidv4 } from '@firebase/util'
 import { Button, Text, Icon, Chip } from '@rneui/themed'
-import DropDownPicker from 'react-native-dropdown-picker'
+import DropDownPicker, { ItemType, ValueType } from 'react-native-dropdown-picker'
 
-const seasons = [
-	{
-		label: 'Summer',
-		value: 'summer',
-	},
-	{
-		label: 'Winter',
-		value: 'winter',
-	},
-	{
-		label: 'All',
-		value: 'all',
-	},
-]
+const makeOptions = (strArr: string[]): ItemType<ValueType>[] => {
+	const arrOfDropObj: ItemType<ValueType>[] = [{ label: 'select', value: undefined }]
+	strArr.forEach((item) => arrOfDropObj.push({ label: item, value: item }))
+	return arrOfDropObj
+}
 
-const category = [
-	{
-		label: 'Work',
-		value: 'work',
-	},
-	{
-		label: 'Casual',
-		value: 'casual',
-	},
-	{
-		label: 'Exercise',
-		value: 'exercise',
-	},
-	{
-		label: 'Going Out',
-		value: 'going out',
-	},
+const pantsArr = ['black', 'green', 'tan', 'navy']
+const blazerArr = ['yes', 'no']
+const cardiganArr = ['navy', 'tan', 'black', 'green']
+const topArr = [
+	'black',
+	'tan',
+	'white',
+	'green',
+	'maroon',
+	'pink',
+	'blue',
+	'grey',
+	'rust',
 ]
+const seasonsArr = ['summer', 'winter', 'all']
+const categoryArr = ['work', 'exercise', 'casual', 'going out']
+
+const pantsOptions = makeOptions(pantsArr)
+
+const topOptions = makeOptions(topArr)
+
+const blazerOptions = makeOptions(blazerArr)
+
+const cardiganOptions = makeOptions(cardiganArr)
+
+const seasonOptions = makeOptions(seasonsArr)
+
+const categoryOptions = makeOptions(categoryArr)
+
 const AddNewOutfit = () => {
 	const [uploadImageSuccess, setUploadImageSuccess] = useState<boolean>(false)
 
@@ -101,18 +103,74 @@ const AddNewOutfit = () => {
 	//dropdown options
 	const [categoryOpen, setCategoryOpen] = useState(false)
 	const [categoryValue, setCategoryValue] = useState(null)
-	const [categoryItems, setCategoryItems] = useState(category)
+	const [categoryItems, setCategoryItems] = useState(categoryOptions)
 
 	const [seasonOpen, setSeasonOpen] = useState(false)
 	const [seasonValue, setSeasonValue] = useState(null)
-	const [seasonItems, setSeasonItems] = useState(seasons)
+	const [seasonItems, setSeasonItems] = useState(seasonOptions)
+
+	const [blazerOpen, setBlazerOpen] = useState(false)
+	const [blazerValue, setBlazerValue] = useState(null)
+	const [blazerItems, setBlazerItems] = useState(blazerOptions)
+
+	const [cardiganOpen, setCardiganOpen] = useState(false)
+	const [cardiganValue, setCardiganValue] = useState(null)
+	const [cardiganItems, setCardiganItems] = useState(cardiganOptions)
+
+	const [topOpen, setTopOpen] = useState(false)
+	const [topValue, setTopValue] = useState(null)
+	const [topItems, setTopItems] = useState(topOptions)
+
+	const [pantsOpen, setPantsOpen] = useState(false)
+	const [pantsValue, setPantsValue] = useState(null)
+	const [pantsItems, setPantsItems] = useState(pantsOptions)
 
 	const onCategoryOpen = useCallback(() => {
 		setSeasonOpen(false)
+		setBlazerOpen(false)
+		setCardiganOpen(false)
+		setTopOpen(false)
+		setPantsOpen(false)
 	}, [])
 
 	const onSeasonOpen = useCallback(() => {
 		setCategoryOpen(false)
+		setBlazerOpen(false)
+		setCardiganOpen(false)
+		setTopOpen(false)
+		setPantsOpen(false)
+	}, [])
+
+	const onBlazerOpen = useCallback(() => {
+		setCategoryOpen(false)
+		setSeasonOpen(false)
+		setCardiganOpen(false)
+		setTopOpen(false)
+		setPantsOpen(false)
+	}, [])
+
+	const onCardiganOpen = useCallback(() => {
+		setCategoryOpen(false)
+		setSeasonOpen(false)
+		setBlazerOpen(false)
+		setTopOpen(false)
+		setPantsOpen(false)
+	}, [])
+
+	const onTopOpen = useCallback(() => {
+		setCategoryOpen(false)
+		setSeasonOpen(false)
+		setBlazerOpen(false)
+		setCardiganOpen(false)
+		setPantsOpen(false)
+	}, [])
+
+	const onPantsOpen = useCallback(() => {
+		setCategoryOpen(false)
+		setSeasonOpen(false)
+		setBlazerOpen(false)
+		setCardiganOpen(false)
+		setTopOpen(false)
 	}, [])
 
 	//permissions check
@@ -219,8 +277,8 @@ const AddNewOutfit = () => {
 					setValue={setCategoryValue}
 					setItems={setCategoryItems}
 					containerStyle={styles.dropdownContainerStyle}
-					placeholder='Category'
-					zIndex={3000}
+					placeholder='select'
+					zIndex={6000}
 					zIndexInverse={1000}
 					onOpen={onCategoryOpen}
 				/>
@@ -236,10 +294,78 @@ const AddNewOutfit = () => {
 					setValue={setSeasonValue}
 					setItems={setSeasonItems}
 					containerStyle={styles.dropdownContainerStyle}
-					placeholder='Season'
-					zIndex={2000}
+					placeholder='select'
+					zIndex={5000}
 					zIndexInverse={2000}
 					onOpen={onSeasonOpen}
+				/>
+			</View>
+
+			<View style={styles.dropdownRow}>
+				<Text style={styles.labelText}>Blazer</Text>
+				<DropDownPicker
+					open={blazerOpen}
+					value={blazerValue}
+					items={blazerItems}
+					setOpen={setBlazerOpen}
+					setValue={setBlazerValue}
+					setItems={setBlazerItems}
+					containerStyle={styles.dropdownContainerStyle}
+					placeholder='select'
+					zIndex={4000}
+					zIndexInverse={3000}
+					onOpen={onBlazerOpen}
+				/>
+			</View>
+
+			<View style={styles.dropdownRow}>
+				<Text style={styles.labelText}>Cardigan</Text>
+				<DropDownPicker
+					open={cardiganOpen}
+					value={cardiganValue}
+					items={cardiganItems}
+					setOpen={setCardiganOpen}
+					setValue={setCardiganValue}
+					setItems={setCardiganItems}
+					containerStyle={styles.dropdownContainerStyle}
+					placeholder='select'
+					zIndex={3000}
+					zIndexInverse={4000}
+					onOpen={onCardiganOpen}
+				/>
+			</View>
+
+			<View style={styles.dropdownRow}>
+				<Text style={styles.labelText}>Top</Text>
+				<DropDownPicker
+					open={topOpen}
+					value={topValue}
+					items={topItems}
+					setOpen={setTopOpen}
+					setValue={setTopValue}
+					setItems={setTopItems}
+					containerStyle={styles.dropdownContainerStyle}
+					placeholder='select'
+					zIndex={2000}
+					zIndexInverse={5000}
+					onOpen={onTopOpen}
+				/>
+			</View>
+
+			<View style={styles.dropdownRow}>
+				<Text style={styles.labelText}>Pants</Text>
+				<DropDownPicker
+					open={pantsOpen}
+					value={pantsValue}
+					items={pantsItems}
+					setOpen={setPantsOpen}
+					setValue={setPantsValue}
+					setItems={setPantsItems}
+					containerStyle={styles.dropdownContainerStyle}
+					placeholder='select'
+					zIndex={1000}
+					zIndexInverse={6000}
+					onOpen={onPantsOpen}
 				/>
 			</View>
 		</SafeAreaView>
