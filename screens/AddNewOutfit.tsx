@@ -342,8 +342,8 @@ const AddNewOutfit = () => {
 					setItems={setCategoryItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={1000}
-					zIndexInverse={6000}
+					zIndex={60}
+					zIndexInverse={10}
 					onOpen={onCategoryOpen}
 				/>
 			</View>
@@ -359,8 +359,8 @@ const AddNewOutfit = () => {
 					setItems={setSeasonItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={5000}
-					zIndexInverse={2000}
+					zIndex={50}
+					zIndexInverse={20}
 					onOpen={onSeasonOpen}
 				/>
 			</View>
@@ -376,8 +376,8 @@ const AddNewOutfit = () => {
 					setItems={setBlazerItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={4000}
-					zIndexInverse={3000}
+					zIndex={40}
+					zIndexInverse={30}
 					onOpen={onBlazerOpen}
 				/>
 			</View>
@@ -393,8 +393,8 @@ const AddNewOutfit = () => {
 					setItems={setCardiganItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={3000}
-					zIndexInverse={4000}
+					zIndex={30}
+					zIndexInverse={40}
 					onOpen={onCardiganOpen}
 				/>
 			</View>
@@ -410,8 +410,8 @@ const AddNewOutfit = () => {
 					setItems={setTopItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={2000}
-					zIndexInverse={5000}
+					zIndex={20}
+					zIndexInverse={50}
 					onOpen={onTopOpen}
 				/>
 			</View>
@@ -427,8 +427,8 @@ const AddNewOutfit = () => {
 					setItems={setPantsItems}
 					containerStyle={styles.dropdownContainerStyle}
 					placeholder='select'
-					zIndex={1000}
-					zIndexInverse={6000}
+					zIndex={10}
+					zIndexInverse={60}
 					onOpen={onPantsOpen}
 				/>
 			</View>
