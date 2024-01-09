@@ -60,10 +60,22 @@ const uploadToFirebaseStorage = async (
 	})
 }
 
+const getImageFromFirebaseStorage = async (path: string | undefined): Promise<string> => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const imgUrl = await getDownloadURL(ref(firebaseStorage, path))
+			resolve(imgUrl)
+		} catch (error) {
+			reject(error)
+		}
+	})
+}
+
 export {
 	firebaseApp,
 	firebaseAuth,
 	firebaseDb,
 	firebaseStorage,
 	uploadToFirebaseStorage,
+	getImageFromFirebaseStorage,
 }
