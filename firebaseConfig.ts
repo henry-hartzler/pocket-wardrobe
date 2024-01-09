@@ -65,5 +65,5 @@ export {
 	firebaseAuth,
 	firebaseDb,
 	firebaseStorage,
-	uploadToFirebaseStorage
+	uploadToFirebaseStorage,
 }

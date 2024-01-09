@@ -23,7 +23,7 @@ import { Outfit } from '../types'
 
 const makeOptions = (strArr: string[]): ItemType<ValueType>[] => {
 	const arrOfDropObj: ItemType<ValueType>[] = [
-		{ label: 'select', value: undefined },
+		{ label: 'select', value: undefined, testID: uuidv4() },
 	]
 	strArr.forEach((item) => arrOfDropObj.push({ label: item, value: item }))
 	return arrOfDropObj
@@ -79,12 +79,7 @@ const AddNewOutfit = () => {
 			if (!cameraResponse.canceled) {
 				const { uri } = cameraResponse.assets[0]
 				const fileName = uri.split('/').pop() + uuidv4()
-				const uploadResponse = await uploadToFirebaseStorage(
-					uri,
-					fileName,
-					(v: any) => console.log(v)
-				)
-				console.log(uploadResponse)
+				await uploadToFirebaseStorage(uri, fileName, (v: any) => console.log(v))
 				setImgPath(fileName)
 				setUploadImageSuccess(true)
 			}
@@ -106,12 +101,7 @@ const AddNewOutfit = () => {
 			if (!mediaLibraryResponse.canceled) {
 				const { uri } = mediaLibraryResponse.assets[0]
 				const fileName = uri.split('/').pop() + uuidv4()
-				const uploadResponse = await uploadToFirebaseStorage(
-					uri,
-					fileName,
-					(v: any) => console.log(v)
-				)
-				console.log(uploadResponse)
+				await uploadToFirebaseStorage(uri, fileName, (v: any) => console.log(v))
 				setImgPath(fileName)
 				setUploadImageSuccess(true)
 			}
