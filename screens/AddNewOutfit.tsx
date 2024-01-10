@@ -277,27 +277,41 @@ const AddNewOutfit = () => {
 				<View style={styles.innerContainer}>
 					{noCameraPermissions && (
 						<>
-							<Text>Camera Permission Not Granted</Text>
-							<Button onPress={requestCameraPermission}>
-								Request Permission
-								<Icon
-									name='camera'
-									type='font-awesome'
-								/>
-							</Button>
+							<Text h4>Camera Permission Not Granted</Text>
+							<Button
+								title='Request Permission'
+								icon={{
+									name: 'camera',
+									type: 'font-awesome',
+									size: 15,
+									color: 'white',
+								}}
+								iconContainerStyle={styles.iconContainerStyle}
+								titleStyle={styles.titleStyle}
+								buttonStyle={styles.buttonStyle}
+								containerStyle={styles.individualButtonsContainer}
+								onPress={requestCameraPermission}
+							/>
 						</>
 					)}
 
 					{noMediaLibraryPermissions && (
 						<>
-							<Text>Media Library Permission Not Granted</Text>
-							<Button onPress={requestMediaLibraryPermission}>
-								Request Permission
-								<Icon
-									name='image'
-									type='font-awesome'
-								/>
-							</Button>
+							<Text h4>Media Library Permission Not Granted</Text>
+							<Button
+								title='Request Permission'
+								icon={{
+									name: 'image',
+									type: 'font-awesome',
+									size: 15,
+									color: 'white',
+								}}
+								iconContainerStyle={styles.iconContainerStyle}
+								titleStyle={styles.titleStyle}
+								buttonStyle={styles.buttonStyle}
+								containerStyle={styles.individualButtonsContainer}
+								onPress={requestMediaLibraryPermission}
+							/>
 						</>
 					)}
 				</View>
