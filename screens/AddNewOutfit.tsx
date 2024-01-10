@@ -19,7 +19,15 @@ import {
 import { ref, getDownloadURL } from 'firebase/storage'
 import { collection, addDoc } from 'firebase/firestore'
 import { uuidv4 } from '@firebase/util'
-import { Button, Text, Icon, Header, Image } from '@rneui/themed'
+import {
+	Button,
+	Text,
+	Icon,
+	Header,
+	Image,
+	BottomSheet,
+	FAB,
+} from '@rneui/themed'
 import DropDownPicker, {
 	ItemType,
 	ValueType,
@@ -103,6 +111,8 @@ const AddNewOutfit = () => {
 							`There was an error retrieving the image url from the database: ${error}`
 						)
 					})
+
+				console.log(currentImgUrl)
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
@@ -265,6 +275,8 @@ const AddNewOutfit = () => {
 		}
 	}
 
+	const [bottomSheetVisible, setBottomSheetVisible] = useState<boolean>(false)
+
 	//permissions check
 	const noCameraPermissions =
 		cameraPermission?.status !== ImagePicker.PermissionStatus.GRANTED
@@ -390,11 +402,7 @@ const AddNewOutfit = () => {
 						}}
 						centerComponent={<Text h3>Select Styles</Text>}
 						rightComponent={
-							<TouchableOpacity
-								onPress={() =>
-									Alert.alert('Show bottom container modal of photo')
-								}
-							>
+							<TouchableOpacity onPress={() => setBottomSheetVisible(true)}>
 								<Icon
 									name='image'
 									type='font-awesome'
@@ -409,14 +417,41 @@ const AddNewOutfit = () => {
 					/>
 
 					<ScrollView>
-						{/* {currentImgUrl && (
-								<Image
-									style={{ height: 50, width: 50 }}
-									source={{ uri: currentImgUrl }}
-									PlaceholderContent={<ActivityIndicator />}
-								/>
-							)} */}
 						<View style={styles.innerContainer}>
+							<BottomSheet
+								isVisible={bottomSheetVisible}
+								onBackdropPress={() => setBottomSheetVisible(false)}
+								containerStyle={{
+									backgroundColor: 'black',
+									justifyContent: 'center',
+									alignItems: 'center',
+									width: 'auto',
+									flex: 1,
+									paddingTop: 50,
+								}}
+								backdropStyle={{ backgroundColor: 'white' }}
+							>
+								{currentImgUrl && (
+									<Image
+										style={{ height: 500, width: 300, marginVertical: 20 }}
+										source={{ uri: currentImgUrl }}
+										PlaceholderContent={<ActivityIndicator />}
+									/>
+								)}
+
+								<FAB
+									visible
+									icon={{
+										name: 'close',
+										type: 'font-awesome',
+										color: 'black',
+									}}
+									color='white'
+									size='large'
+									onPress={() => setBottomSheetVisible(false)}
+								/>
+							</BottomSheet>
+
 							<View
 								style={{
 									marginVertical: 20,
@@ -439,7 +474,6 @@ const AddNewOutfit = () => {
 									onOpen={onCategoryOpen}
 								/>
 							</View>
-
 							<View
 								style={{
 									marginVertical: 15,
@@ -462,7 +496,6 @@ const AddNewOutfit = () => {
 									onOpen={onSeasonOpen}
 								/>
 							</View>
-
 							<View
 								style={{
 									marginVertical: 15,
@@ -485,7 +518,6 @@ const AddNewOutfit = () => {
 									onOpen={onBlazerOpen}
 								/>
 							</View>
-
 							<View
 								style={{
 									marginVertical: 15,
@@ -508,7 +540,6 @@ const AddNewOutfit = () => {
 									onOpen={onCardiganOpen}
 								/>
 							</View>
-
 							<View
 								style={{
 									marginVertical: 15,
@@ -531,7 +562,6 @@ const AddNewOutfit = () => {
 									onOpen={onTopOpen}
 								/>
 							</View>
-
 							<View
 								style={{
 									marginVertical: 15,
@@ -554,7 +584,6 @@ const AddNewOutfit = () => {
 									onOpen={onPantsOpen}
 								/>
 							</View>
-
 							<View style={styles.firstScreenItem}>
 								<Button
 									title='UPLOAD NEW OUTFIT'
