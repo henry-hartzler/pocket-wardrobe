@@ -421,14 +421,7 @@ const AddNewOutfit = () => {
 							<BottomSheet
 								isVisible={bottomSheetVisible}
 								onBackdropPress={() => setBottomSheetVisible(false)}
-								containerStyle={{
-									backgroundColor: 'black',
-									justifyContent: 'center',
-									alignItems: 'center',
-									width: 'auto',
-									flex: 1,
-									paddingTop: 50,
-								}}
+								containerStyle={styles.bottomSheet}
 								backdropStyle={{ backgroundColor: 'white' }}
 							>
 								{currentImgUrl && (
@@ -644,6 +637,14 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		flex: 1,
+	},
+	bottomSheet: {
+		backgroundColor: 'black',
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: 'auto',
+		flex: 1,
+		paddingTop: 50,
 	},
 })
 
