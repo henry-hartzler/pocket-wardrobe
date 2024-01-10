@@ -68,7 +68,6 @@ const deleteImageFile = async (imgPath: string | undefined) => {
 		// Delete the file
 		await deleteObject(imageRef)
 	}
-	
 }
 
 export {

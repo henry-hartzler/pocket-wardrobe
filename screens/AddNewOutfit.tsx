@@ -15,9 +15,10 @@ import {
 	firebaseStorage,
 	deleteImageFile,
 } from '../firebaseConfig'
+import { ref, getDownloadURL } from 'firebase/storage'
 import { collection, addDoc } from 'firebase/firestore'
 import { uuidv4 } from '@firebase/util'
-import { Button, Text, Icon, Header } from '@rneui/themed'
+import { Button, Text, Icon, Header, Image } from '@rneui/themed'
 import DropDownPicker, {
 	ItemType,
 	ValueType,
@@ -62,8 +63,14 @@ const seasonOptions = makeOptions(seasonsArr)
 const categoryOptions = makeOptions(categoryArr)
 
 const AddNewOutfit = () => {
+	const [loading, setLoading] = useState<boolean>(false)
+
 	const [uploadImageSuccess, setUploadImageSuccess] = useState<boolean>(false)
 	const [imgPath, setImgPath] = useState<string | undefined>(undefined)
+
+	const [currentImgUrl, setCurrentImgUrl] = useState<string | undefined>(
+		undefined
+	)
 
 	const [cameraPermission, requestCameraPermission] =
 		ImagePicker.useCameraPermissions()
@@ -85,6 +92,16 @@ const AddNewOutfit = () => {
 				await uploadToFirebaseStorage(uri, fileName, (v: any) => console.log(v))
 				setImgPath(fileName)
 				setUploadImageSuccess(true)
+
+				getDownloadURL(ref(firebaseStorage, `outfitImages/${fileName}`))
+					.then((url) => {
+						setCurrentImgUrl(url)
+					})
+					.catch((error: any) => {
+						Alert.alert(
+							`There was an error retrieving the image url from the database: ${error}`
+						)
+					})
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
@@ -107,6 +124,16 @@ const AddNewOutfit = () => {
 				await uploadToFirebaseStorage(uri, fileName, (v: any) => console.log(v))
 				setImgPath(fileName)
 				setUploadImageSuccess(true)
+
+				getDownloadURL(ref(firebaseStorage, `outfitImages/${fileName}`))
+					.then((url) => {
+						setCurrentImgUrl(url)
+					})
+					.catch((error: any) => {
+						Alert.alert(
+							`There was an error retrieving the image url from the database: ${error}`
+						)
+					})
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
@@ -119,9 +146,10 @@ const AddNewOutfit = () => {
 		try {
 			await deleteImageFile(imgPath)
 		} catch {
-			Alert.alert('There was an error deleting the current image from the database')
+			Alert.alert(
+				'There was an error deleting the current image from the database'
+			)
 		}
-		
 	}
 
 	//dropdown options
@@ -209,8 +237,6 @@ const AddNewOutfit = () => {
 		img: imgPath,
 		userId: currentUserId,
 	}
-
-	const [loading, setLoading] = useState<boolean>(false)
 
 	const resetOptions = () => {
 		setCategoryValue(null)
@@ -351,6 +377,14 @@ const AddNewOutfit = () => {
 					/>
 
 					<View style={styles.innerContainer}>
+						{currentImgUrl && (
+							<Image
+								style={{ height: 50, width: 50 }}
+								source={{ uri: currentImgUrl }}
+								PlaceholderContent={<ActivityIndicator />}
+							/>
+						)}
+
 						<View
 							style={{
 								marginVertical: 20,
