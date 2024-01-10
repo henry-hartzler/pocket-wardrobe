@@ -6,6 +6,7 @@ import {
 	View,
 	ActivityIndicator,
 	TouchableOpacity,
+	ScrollView,
 } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import {
@@ -374,174 +375,192 @@ const AddNewOutfit = () => {
 							alignItems: 'center',
 						}}
 						centerComponent={<Text h3>Select Styles</Text>}
+						rightComponent={
+							<TouchableOpacity
+								onPress={() =>
+									Alert.alert('Show bottom container modal of photo')
+								}
+							>
+								<Icon
+									name='image'
+									type='font-awesome'
+									color='black'
+								/>
+							</TouchableOpacity>
+						}
+						rightContainerStyle={{
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
 					/>
 
-					<View style={styles.innerContainer}>
-						{currentImgUrl && (
-							<Image
-								style={{ height: 50, width: 50 }}
-								source={{ uri: currentImgUrl }}
-								PlaceholderContent={<ActivityIndicator />}
-							/>
-						)}
-
-						<View
-							style={{
-								marginVertical: 20,
-								flexDirection: 'row',
-								alignItems: 'center',
-								marginHorizontal: 20,
-								zIndex: categoryOpen ? 1 : 0,
-							}}
-						>
-							<Text style={styles.labelText}>Category</Text>
-							<DropDownPicker
-								open={categoryOpen}
-								value={categoryValue}
-								items={categoryItems}
-								setOpen={setCategoryOpen}
-								setValue={setCategoryValue}
-								setItems={setCategoryItems}
-								containerStyle={styles.dropdownContainerStyle}
-								placeholder='select'
-								onOpen={onCategoryOpen}
-							/>
-						</View>
-
-						<View
-							style={{
-								marginVertical: 15,
-								flexDirection: 'row',
-								alignItems: 'center',
-								marginHorizontal: 20,
-								zIndex: seasonOpen ? 1 : 0,
-							}}
-						>
-							<Text style={styles.labelText}>Season</Text>
-							<DropDownPicker
-								open={seasonOpen}
-								value={seasonValue}
-								items={seasonItems}
-								setOpen={setSeasonOpen}
-								setValue={setSeasonValue}
-								setItems={setSeasonItems}
-								containerStyle={styles.dropdownContainerStyle}
-								placeholder='select'
-								onOpen={onSeasonOpen}
-							/>
-						</View>
-
-						<View
-							style={{
-								marginVertical: 15,
-								flexDirection: 'row',
-								alignItems: 'center',
-								marginHorizontal: 20,
-								zIndex: blazerOpen ? 1 : 0,
-							}}
-						>
-							<Text style={styles.labelText}>Blazer</Text>
-							<DropDownPicker
-								open={blazerOpen}
-								value={blazerValue}
-								items={blazerItems}
-								setOpen={setBlazerOpen}
-								setValue={setBlazerValue}
-								setItems={setBlazerItems}
-								containerStyle={styles.dropdownContainerStyle}
-								placeholder='select'
-								onOpen={onBlazerOpen}
-							/>
-						</View>
-
-						<View
-							style={{
-								marginVertical: 15,
-								flexDirection: 'row',
-								alignItems: 'center',
-								marginHorizontal: 20,
-								zIndex: cardiganOpen ? 1 : 0,
-							}}
-						>
-							<Text style={styles.labelText}>Cardigan</Text>
-							<DropDownPicker
-								open={cardiganOpen}
-								value={cardiganValue}
-								items={cardiganItems}
-								setOpen={setCardiganOpen}
-								setValue={setCardiganValue}
-								setItems={setCardiganItems}
-								containerStyle={styles.dropdownContainerStyle}
-								placeholder='select'
-								onOpen={onCardiganOpen}
-							/>
-						</View>
-
-						<View
-							style={{
-								marginVertical: 15,
-								flexDirection: 'row',
-								alignItems: 'center',
-								marginHorizontal: 20,
-								zIndex: topOpen ? 1 : 0,
-							}}
-						>
-							<Text style={styles.labelText}>Top</Text>
-							<DropDownPicker
-								open={topOpen}
-								value={topValue}
-								items={topItems}
-								setOpen={setTopOpen}
-								setValue={setTopValue}
-								setItems={setTopItems}
-								containerStyle={styles.dropdownContainerStyle}
-								placeholder='select'
-								onOpen={onTopOpen}
-							/>
-						</View>
-
-						<View
-							style={{
-								marginVertical: 15,
-								flexDirection: 'row',
-								alignItems: 'center',
-								marginHorizontal: 20,
-								zIndex: pantsOpen ? 1 : 0,
-							}}
-						>
-							<Text style={styles.labelText}>Pants</Text>
-							<DropDownPicker
-								open={pantsOpen}
-								value={pantsValue}
-								items={pantsItems}
-								setOpen={setPantsOpen}
-								setValue={setPantsValue}
-								setItems={setPantsItems}
-								containerStyle={styles.dropdownContainerStyle}
-								placeholder='select'
-								onOpen={onPantsOpen}
-							/>
-						</View>
-
-						<View style={styles.firstScreenItem}>
-							<Button
-								title='UPLOAD NEW OUTFIT'
-								icon={{
-									name: 'upload',
-									type: 'font-awesome',
-									size: 15,
-									color: 'white',
+					<ScrollView>
+						{/* {currentImgUrl && (
+								<Image
+									style={{ height: 50, width: 50 }}
+									source={{ uri: currentImgUrl }}
+									PlaceholderContent={<ActivityIndicator />}
+								/>
+							)} */}
+						<View style={styles.innerContainer}>
+							<View
+								style={{
+									marginVertical: 20,
+									flexDirection: 'row',
+									alignItems: 'center',
+									marginHorizontal: 20,
+									zIndex: categoryOpen ? 1 : 0,
 								}}
-								iconContainerStyle={styles.iconContainerStyle}
-								titleStyle={styles.titleStyle}
-								buttonStyle={styles.buttonStyle}
-								containerStyle={styles.individualButtonsContainer}
-								disabled={loading}
-								loading={loading}
-								onPress={() => (setLoading(true), uploadNewOutfit())}
-							/>
+							>
+								<Text style={styles.labelText}>Category</Text>
+								<DropDownPicker
+									open={categoryOpen}
+									value={categoryValue}
+									items={categoryItems}
+									setOpen={setCategoryOpen}
+									setValue={setCategoryValue}
+									setItems={setCategoryItems}
+									containerStyle={styles.dropdownContainerStyle}
+									placeholder='select'
+									onOpen={onCategoryOpen}
+								/>
+							</View>
+
+							<View
+								style={{
+									marginVertical: 15,
+									flexDirection: 'row',
+									alignItems: 'center',
+									marginHorizontal: 20,
+									zIndex: seasonOpen ? 1 : 0,
+								}}
+							>
+								<Text style={styles.labelText}>Season</Text>
+								<DropDownPicker
+									open={seasonOpen}
+									value={seasonValue}
+									items={seasonItems}
+									setOpen={setSeasonOpen}
+									setValue={setSeasonValue}
+									setItems={setSeasonItems}
+									containerStyle={styles.dropdownContainerStyle}
+									placeholder='select'
+									onOpen={onSeasonOpen}
+								/>
+							</View>
+
+							<View
+								style={{
+									marginVertical: 15,
+									flexDirection: 'row',
+									alignItems: 'center',
+									marginHorizontal: 20,
+									zIndex: blazerOpen ? 1 : 0,
+								}}
+							>
+								<Text style={styles.labelText}>Blazer</Text>
+								<DropDownPicker
+									open={blazerOpen}
+									value={blazerValue}
+									items={blazerItems}
+									setOpen={setBlazerOpen}
+									setValue={setBlazerValue}
+									setItems={setBlazerItems}
+									containerStyle={styles.dropdownContainerStyle}
+									placeholder='select'
+									onOpen={onBlazerOpen}
+								/>
+							</View>
+
+							<View
+								style={{
+									marginVertical: 15,
+									flexDirection: 'row',
+									alignItems: 'center',
+									marginHorizontal: 20,
+									zIndex: cardiganOpen ? 1 : 0,
+								}}
+							>
+								<Text style={styles.labelText}>Cardigan</Text>
+								<DropDownPicker
+									open={cardiganOpen}
+									value={cardiganValue}
+									items={cardiganItems}
+									setOpen={setCardiganOpen}
+									setValue={setCardiganValue}
+									setItems={setCardiganItems}
+									containerStyle={styles.dropdownContainerStyle}
+									placeholder='select'
+									onOpen={onCardiganOpen}
+								/>
+							</View>
+
+							<View
+								style={{
+									marginVertical: 15,
+									flexDirection: 'row',
+									alignItems: 'center',
+									marginHorizontal: 20,
+									zIndex: topOpen ? 1 : 0,
+								}}
+							>
+								<Text style={styles.labelText}>Top</Text>
+								<DropDownPicker
+									open={topOpen}
+									value={topValue}
+									items={topItems}
+									setOpen={setTopOpen}
+									setValue={setTopValue}
+									setItems={setTopItems}
+									containerStyle={styles.dropdownContainerStyle}
+									placeholder='select'
+									onOpen={onTopOpen}
+								/>
+							</View>
+
+							<View
+								style={{
+									marginVertical: 15,
+									flexDirection: 'row',
+									alignItems: 'center',
+									marginHorizontal: 20,
+									zIndex: pantsOpen ? 1 : 0,
+								}}
+							>
+								<Text style={styles.labelText}>Pants</Text>
+								<DropDownPicker
+									open={pantsOpen}
+									value={pantsValue}
+									items={pantsItems}
+									setOpen={setPantsOpen}
+									setValue={setPantsValue}
+									setItems={setPantsItems}
+									containerStyle={styles.dropdownContainerStyle}
+									placeholder='select'
+									onOpen={onPantsOpen}
+								/>
+							</View>
+
+							<View style={styles.firstScreenItem}>
+								<Button
+									title='UPLOAD NEW OUTFIT'
+									icon={{
+										name: 'upload',
+										type: 'font-awesome',
+										size: 15,
+										color: 'white',
+									}}
+									iconContainerStyle={styles.iconContainerStyle}
+									titleStyle={styles.titleStyle}
+									buttonStyle={styles.buttonStyle}
+									containerStyle={styles.individualButtonsContainer}
+									disabled={loading}
+									loading={loading}
+									onPress={() => (setLoading(true), uploadNewOutfit())}
+								/>
+							</View>
 						</View>
-					</View>
+					</ScrollView>
 				</>
 			)}
 		</SafeAreaView>
