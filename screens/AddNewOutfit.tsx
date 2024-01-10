@@ -13,6 +13,7 @@ import {
 	uploadToFirebaseStorage,
 	firebaseAuth,
 	firebaseStorage,
+	deleteImageFile,
 } from '../firebaseConfig'
 import { collection, addDoc } from 'firebase/firestore'
 import { uuidv4 } from '@firebase/util'
@@ -112,6 +113,15 @@ const AddNewOutfit = () => {
 		} finally {
 			setLoading(false)
 		}
+	}
+
+	const deleteCurrentPhoto = async () => {
+		try {
+			await deleteImageFile(imgPath)
+		} catch {
+			Alert.alert('There was an error deleting the current image from the database')
+		}
+		
 	}
 
 	//dropdown options
@@ -323,7 +333,9 @@ const AddNewOutfit = () => {
 					<Header
 						containerStyle={styles.headerContainer}
 						leftComponent={
-							<TouchableOpacity onPress={resetOptions}>
+							<TouchableOpacity
+								onPress={() => (deleteCurrentPhoto(), resetOptions())}
+							>
 								<Icon
 									name='chevron-left'
 									type='font-awesome'

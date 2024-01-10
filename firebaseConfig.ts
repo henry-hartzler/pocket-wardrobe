@@ -6,6 +6,7 @@ import {
 	ref,
 	uploadBytesResumable,
 	getDownloadURL,
+	deleteObject,
 } from 'firebase/storage'
 
 const firebaseConfig = {
@@ -60,10 +61,21 @@ const uploadToFirebaseStorage = async (
 	})
 }
 
+const deleteImageFile = async (imgPath: string | undefined) => {
+	if (imgPath) {
+		const imageRef = ref(firebaseStorage, `outfitImages/${imgPath}`)
+
+		// Delete the file
+		await deleteObject(imageRef)
+	}
+	
+}
+
 export {
 	firebaseApp,
 	firebaseAuth,
 	firebaseDb,
 	firebaseStorage,
 	uploadToFirebaseStorage,
+	deleteImageFile,
 }
