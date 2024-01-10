@@ -13,4 +13,5 @@ export type Outfit = {
 	pants: string | undefined | null
 	img: string | undefined | null
 	userId: string | undefined | null
+	dateLastWorn?: string | undefined | null
 }

@@ -5,16 +5,20 @@ import {
 	Alert,
 	View,
 	ActivityIndicator,
+	TouchableOpacity,
 } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import {
 	firebaseDb,
 	uploadToFirebaseStorage,
 	firebaseAuth,
+	firebaseStorage,
+	deleteImageFile,
 } from '../firebaseConfig'
+import { ref, getDownloadURL } from 'firebase/storage'
 import { collection, addDoc } from 'firebase/firestore'
 import { uuidv4 } from '@firebase/util'
-import { Button, Text, Icon, Chip } from '@rneui/themed'
+import { Button, Text, Icon, Header, Image } from '@rneui/themed'
 import DropDownPicker, {
 	ItemType,
 	ValueType,
@@ -23,7 +27,7 @@ import { Outfit } from '../types'
 
 const makeOptions = (strArr: string[]): ItemType<ValueType>[] => {
 	const arrOfDropObj: ItemType<ValueType>[] = [
-		{ label: 'select', value: undefined },
+		{ label: 'select', value: undefined, testID: uuidv4() },
 	]
 	strArr.forEach((item) => arrOfDropObj.push({ label: item, value: item }))
 	return arrOfDropObj
@@ -59,8 +63,14 @@ const seasonOptions = makeOptions(seasonsArr)
 const categoryOptions = makeOptions(categoryArr)
 
 const AddNewOutfit = () => {
+	const [loading, setLoading] = useState<boolean>(false)
+
 	const [uploadImageSuccess, setUploadImageSuccess] = useState<boolean>(false)
 	const [imgPath, setImgPath] = useState<string | undefined>(undefined)
+
+	const [currentImgUrl, setCurrentImgUrl] = useState<string | undefined>(
+		undefined
+	)
 
 	const [cameraPermission, requestCameraPermission] =
 		ImagePicker.useCameraPermissions()
@@ -79,14 +89,19 @@ const AddNewOutfit = () => {
 			if (!cameraResponse.canceled) {
 				const { uri } = cameraResponse.assets[0]
 				const fileName = uri.split('/').pop() + uuidv4()
-				const uploadResponse = await uploadToFirebaseStorage(
-					uri,
-					fileName,
-					(v: any) => console.log(v)
-				)
-				console.log(uploadResponse)
+				await uploadToFirebaseStorage(uri, fileName, (v: any) => console.log(v))
 				setImgPath(fileName)
 				setUploadImageSuccess(true)
+
+				getDownloadURL(ref(firebaseStorage, `outfitImages/${fileName}`))
+					.then((url) => {
+						setCurrentImgUrl(url)
+					})
+					.catch((error: any) => {
+						Alert.alert(
+							`There was an error retrieving the image url from the database: ${error}`
+						)
+					})
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
@@ -106,19 +121,34 @@ const AddNewOutfit = () => {
 			if (!mediaLibraryResponse.canceled) {
 				const { uri } = mediaLibraryResponse.assets[0]
 				const fileName = uri.split('/').pop() + uuidv4()
-				const uploadResponse = await uploadToFirebaseStorage(
-					uri,
-					fileName,
-					(v: any) => console.log(v)
-				)
-				console.log(uploadResponse)
+				await uploadToFirebaseStorage(uri, fileName, (v: any) => console.log(v))
 				setImgPath(fileName)
 				setUploadImageSuccess(true)
+
+				getDownloadURL(ref(firebaseStorage, `outfitImages/${fileName}`))
+					.then((url) => {
+						setCurrentImgUrl(url)
+					})
+					.catch((error: any) => {
+						Alert.alert(
+							`There was an error retrieving the image url from the database: ${error}`
+						)
+					})
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
 		} finally {
 			setLoading(false)
+		}
+	}
+
+	const deleteCurrentPhoto = async () => {
+		try {
+			await deleteImageFile(imgPath)
+		} catch {
+			Alert.alert(
+				'There was an error deleting the current image from the database'
+			)
 		}
 	}
 
@@ -208,8 +238,6 @@ const AddNewOutfit = () => {
 		userId: currentUserId,
 	}
 
-	const [loading, setLoading] = useState<boolean>(false)
-
 	const resetOptions = () => {
 		setCategoryValue(null)
 		setSeasonValue(null)
@@ -245,31 +273,33 @@ const AddNewOutfit = () => {
 	if (noCameraPermissions || noMediaLibraryPermissions) {
 		return (
 			<SafeAreaView style={styles.container}>
-				{noCameraPermissions && (
-					<>
-						<Text>Camera Permission Not Granted</Text>
-						<Button onPress={requestCameraPermission}>
-							Request Permission
-							<Icon
-								name='camera'
-								type='font-awesome'
-							/>
-						</Button>
-					</>
-				)}
+				<View style={styles.innerContainer}>
+					{noCameraPermissions && (
+						<>
+							<Text>Camera Permission Not Granted</Text>
+							<Button onPress={requestCameraPermission}>
+								Request Permission
+								<Icon
+									name='camera'
+									type='font-awesome'
+								/>
+							</Button>
+						</>
+					)}
 
-				{noMediaLibraryPermissions && (
-					<>
-						<Text>Media Library Permission Not Granted</Text>
-						<Button onPress={requestMediaLibraryPermission}>
-							Request Permission
-							<Icon
-								name='image'
-								type='font-awesome'
-							/>
-						</Button>
-					</>
-				)}
+					{noMediaLibraryPermissions && (
+						<>
+							<Text>Media Library Permission Not Granted</Text>
+							<Button onPress={requestMediaLibraryPermission}>
+								Request Permission
+								<Icon
+									name='image'
+									type='font-awesome'
+								/>
+							</Button>
+						</>
+					)}
+				</View>
 			</SafeAreaView>
 		)
 	}
@@ -278,12 +308,14 @@ const AddNewOutfit = () => {
 	return (
 		<SafeAreaView style={styles.container}>
 			{loading ? (
-				<ActivityIndicator
-					color='blue'
-					size='large'
-				/>
+				<View style={styles.innerContainer}>
+					<ActivityIndicator
+						color='blue'
+						size='large'
+					/>
+				</View>
 			) : !uploadImageSuccess ? (
-				<>
+				<View style={styles.innerContainer}>
 					<View style={styles.firstScreenItem}>
 						<Text h2>Choose a Photo</Text>
 					</View>
@@ -321,165 +353,194 @@ const AddNewOutfit = () => {
 							onPress={() => (setLoading(true), uploadPhoto())}
 						/>
 					</View>
-				</>
+				</View>
 			) : (
 				<>
-					<Text h2>Select Styles</Text>
-					<View
-						style={{
-							marginVertical: 20,
-							flexDirection: 'row',
+					<Header
+						containerStyle={styles.headerContainer}
+						leftComponent={
+							<TouchableOpacity
+								onPress={() => (deleteCurrentPhoto(), resetOptions())}
+							>
+								<Icon
+									name='chevron-left'
+									type='font-awesome'
+									color='black'
+								/>
+							</TouchableOpacity>
+						}
+						leftContainerStyle={{
+							justifyContent: 'center',
 							alignItems: 'center',
-							marginHorizontal: 20,
-							zIndex: categoryOpen ? 1 : 0,
 						}}
-					>
-						<Text style={styles.labelText}>Category</Text>
-						<DropDownPicker
-							open={categoryOpen}
-							value={categoryValue}
-							items={categoryItems}
-							setOpen={setCategoryOpen}
-							setValue={setCategoryValue}
-							setItems={setCategoryItems}
-							containerStyle={styles.dropdownContainerStyle}
-							placeholder='select'
-							onOpen={onCategoryOpen}
-						/>
-					</View>
+						centerComponent={<Text h3>Select Styles</Text>}
+					/>
 
-					<View
-						style={{
-							marginVertical: 15,
-							flexDirection: 'row',
-							alignItems: 'center',
-							marginHorizontal: 20,
-							zIndex: seasonOpen ? 1 : 0,
-						}}
-					>
-						<Text style={styles.labelText}>Season</Text>
-						<DropDownPicker
-							open={seasonOpen}
-							value={seasonValue}
-							items={seasonItems}
-							setOpen={setSeasonOpen}
-							setValue={setSeasonValue}
-							setItems={setSeasonItems}
-							containerStyle={styles.dropdownContainerStyle}
-							placeholder='select'
-							onOpen={onSeasonOpen}
-						/>
-					</View>
+					<View style={styles.innerContainer}>
+						{currentImgUrl && (
+							<Image
+								style={{ height: 50, width: 50 }}
+								source={{ uri: currentImgUrl }}
+								PlaceholderContent={<ActivityIndicator />}
+							/>
+						)}
 
-					<View
-						style={{
-							marginVertical: 15,
-							flexDirection: 'row',
-							alignItems: 'center',
-							marginHorizontal: 20,
-							zIndex: blazerOpen ? 1 : 0,
-						}}
-					>
-						<Text style={styles.labelText}>Blazer</Text>
-						<DropDownPicker
-							open={blazerOpen}
-							value={blazerValue}
-							items={blazerItems}
-							setOpen={setBlazerOpen}
-							setValue={setBlazerValue}
-							setItems={setBlazerItems}
-							containerStyle={styles.dropdownContainerStyle}
-							placeholder='select'
-							onOpen={onBlazerOpen}
-						/>
-					</View>
-
-					<View
-						style={{
-							marginVertical: 15,
-							flexDirection: 'row',
-							alignItems: 'center',
-							marginHorizontal: 20,
-							zIndex: cardiganOpen ? 1 : 0,
-						}}
-					>
-						<Text style={styles.labelText}>Cardigan</Text>
-						<DropDownPicker
-							open={cardiganOpen}
-							value={cardiganValue}
-							items={cardiganItems}
-							setOpen={setCardiganOpen}
-							setValue={setCardiganValue}
-							setItems={setCardiganItems}
-							containerStyle={styles.dropdownContainerStyle}
-							placeholder='select'
-							onOpen={onCardiganOpen}
-						/>
-					</View>
-
-					<View
-						style={{
-							marginVertical: 15,
-							flexDirection: 'row',
-							alignItems: 'center',
-							marginHorizontal: 20,
-							zIndex: topOpen ? 1 : 0,
-						}}
-					>
-						<Text style={styles.labelText}>Top</Text>
-						<DropDownPicker
-							open={topOpen}
-							value={topValue}
-							items={topItems}
-							setOpen={setTopOpen}
-							setValue={setTopValue}
-							setItems={setTopItems}
-							containerStyle={styles.dropdownContainerStyle}
-							placeholder='select'
-							onOpen={onTopOpen}
-						/>
-					</View>
-
-					<View
-						style={{
-							marginVertical: 15,
-							flexDirection: 'row',
-							alignItems: 'center',
-							marginHorizontal: 20,
-							zIndex: pantsOpen ? 1 : 0,
-						}}
-					>
-						<Text style={styles.labelText}>Pants</Text>
-						<DropDownPicker
-							open={pantsOpen}
-							value={pantsValue}
-							items={pantsItems}
-							setOpen={setPantsOpen}
-							setValue={setPantsValue}
-							setItems={setPantsItems}
-							containerStyle={styles.dropdownContainerStyle}
-							placeholder='select'
-							onOpen={onPantsOpen}
-						/>
-					</View>
-
-					<View style={styles.firstScreenItem}>
-						<Button
-							title='UPLOAD NEW OUTFIT'
-							icon={{
-								name: 'upload',
-								type: 'font-awesome',
-								size: 15,
-								color: 'white',
+						<View
+							style={{
+								marginVertical: 20,
+								flexDirection: 'row',
+								alignItems: 'center',
+								marginHorizontal: 20,
+								zIndex: categoryOpen ? 1 : 0,
 							}}
-							iconContainerStyle={styles.iconContainerStyle}
-							titleStyle={styles.titleStyle}
-							buttonStyle={styles.buttonStyle}
-							containerStyle={styles.individualButtonsContainer}
-							disabled={loading}
-							loading={loading}
-							onPress={() => (setLoading(true), uploadNewOutfit())}
-						/>
+						>
+							<Text style={styles.labelText}>Category</Text>
+							<DropDownPicker
+								open={categoryOpen}
+								value={categoryValue}
+								items={categoryItems}
+								setOpen={setCategoryOpen}
+								setValue={setCategoryValue}
+								setItems={setCategoryItems}
+								containerStyle={styles.dropdownContainerStyle}
+								placeholder='select'
+								onOpen={onCategoryOpen}
+							/>
+						</View>
+
+						<View
+							style={{
+								marginVertical: 15,
+								flexDirection: 'row',
+								alignItems: 'center',
+								marginHorizontal: 20,
+								zIndex: seasonOpen ? 1 : 0,
+							}}
+						>
+							<Text style={styles.labelText}>Season</Text>
+							<DropDownPicker
+								open={seasonOpen}
+								value={seasonValue}
+								items={seasonItems}
+								setOpen={setSeasonOpen}
+								setValue={setSeasonValue}
+								setItems={setSeasonItems}
+								containerStyle={styles.dropdownContainerStyle}
+								placeholder='select'
+								onOpen={onSeasonOpen}
+							/>
+						</View>
+
+						<View
+							style={{
+								marginVertical: 15,
+								flexDirection: 'row',
+								alignItems: 'center',
+								marginHorizontal: 20,
+								zIndex: blazerOpen ? 1 : 0,
+							}}
+						>
+							<Text style={styles.labelText}>Blazer</Text>
+							<DropDownPicker
+								open={blazerOpen}
+								value={blazerValue}
+								items={blazerItems}
+								setOpen={setBlazerOpen}
+								setValue={setBlazerValue}
+								setItems={setBlazerItems}
+								containerStyle={styles.dropdownContainerStyle}
+								placeholder='select'
+								onOpen={onBlazerOpen}
+							/>
+						</View>
+
+						<View
+							style={{
+								marginVertical: 15,
+								flexDirection: 'row',
+								alignItems: 'center',
+								marginHorizontal: 20,
+								zIndex: cardiganOpen ? 1 : 0,
+							}}
+						>
+							<Text style={styles.labelText}>Cardigan</Text>
+							<DropDownPicker
+								open={cardiganOpen}
+								value={cardiganValue}
+								items={cardiganItems}
+								setOpen={setCardiganOpen}
+								setValue={setCardiganValue}
+								setItems={setCardiganItems}
+								containerStyle={styles.dropdownContainerStyle}
+								placeholder='select'
+								onOpen={onCardiganOpen}
+							/>
+						</View>
+
+						<View
+							style={{
+								marginVertical: 15,
+								flexDirection: 'row',
+								alignItems: 'center',
+								marginHorizontal: 20,
+								zIndex: topOpen ? 1 : 0,
+							}}
+						>
+							<Text style={styles.labelText}>Top</Text>
+							<DropDownPicker
+								open={topOpen}
+								value={topValue}
+								items={topItems}
+								setOpen={setTopOpen}
+								setValue={setTopValue}
+								setItems={setTopItems}
+								containerStyle={styles.dropdownContainerStyle}
+								placeholder='select'
+								onOpen={onTopOpen}
+							/>
+						</View>
+
+						<View
+							style={{
+								marginVertical: 15,
+								flexDirection: 'row',
+								alignItems: 'center',
+								marginHorizontal: 20,
+								zIndex: pantsOpen ? 1 : 0,
+							}}
+						>
+							<Text style={styles.labelText}>Pants</Text>
+							<DropDownPicker
+								open={pantsOpen}
+								value={pantsValue}
+								items={pantsItems}
+								setOpen={setPantsOpen}
+								setValue={setPantsValue}
+								setItems={setPantsItems}
+								containerStyle={styles.dropdownContainerStyle}
+								placeholder='select'
+								onOpen={onPantsOpen}
+							/>
+						</View>
+
+						<View style={styles.firstScreenItem}>
+							<Button
+								title='UPLOAD NEW OUTFIT'
+								icon={{
+									name: 'upload',
+									type: 'font-awesome',
+									size: 15,
+									color: 'white',
+								}}
+								iconContainerStyle={styles.iconContainerStyle}
+								titleStyle={styles.titleStyle}
+								buttonStyle={styles.buttonStyle}
+								containerStyle={styles.individualButtonsContainer}
+								disabled={loading}
+								loading={loading}
+								onPress={() => (setLoading(true), uploadNewOutfit())}
+							/>
+						</View>
 					</View>
 				</>
 			)}
@@ -490,10 +551,7 @@ const AddNewOutfit = () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
 		backgroundColor: 'white',
-		padding: 20,
 	},
 	firstScreenItem: {
 		marginVertical: 20,
@@ -513,6 +571,17 @@ const styles = StyleSheet.create({
 	dropdownContainerStyle: { width: 200 },
 	labelText: {
 		marginRight: 10,
+	},
+	headerContainer: {
+		width: '100%',
+		backgroundColor: 'white',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	innerContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		flex: 1,
 	},
 })
 
