@@ -16,13 +16,12 @@ import {
 } from '../firebaseConfig'
 import { collection, addDoc } from 'firebase/firestore'
 import { uuidv4 } from '@firebase/util'
-import { Button, Text, Icon, Image, Header } from '@rneui/themed'
+import { Button, Text, Icon, Header } from '@rneui/themed'
 import DropDownPicker, {
 	ItemType,
 	ValueType,
 } from 'react-native-dropdown-picker'
 import { Outfit } from '../types'
-import { getDownloadURL, ref } from 'firebase/storage'
 
 const makeOptions = (strArr: string[]): ItemType<ValueType>[] => {
 	const arrOfDropObj: ItemType<ValueType>[] = [
@@ -112,17 +111,6 @@ const AddNewOutfit = () => {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
 		} finally {
 			setLoading(false)
-		}
-	}
-
-	const LoadImageFromFirebaseStorage = async () => {
-		if (imgPath) {
-			try {
-				const imgUrl = await getDownloadURL(ref(firebaseStorage, imgPath))
-				return <Image source={{ uri: imgPath }} />
-			} catch (error) {
-				console.log(error)
-			}
 		}
 	}
 
@@ -351,8 +339,6 @@ const AddNewOutfit = () => {
 					/>
 
 					<View style={styles.innerContainer}>
-						<Image source={{ uri: imgPath }} />
-
 						<View
 							style={{
 								marginVertical: 20,
