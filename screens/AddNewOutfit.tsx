@@ -36,9 +36,11 @@ import { Outfit } from '../types'
 
 const makeOptions = (strArr: string[]): ItemType<ValueType>[] => {
 	const arrOfDropObj: ItemType<ValueType>[] = [
-		{ label: 'select', value: undefined, testID: uuidv4() },
+		{ label: 'select', value: undefined, testID: 'select' + uuidv4() },
 	]
-	strArr.forEach((item) => arrOfDropObj.push({ label: item, value: item }))
+	strArr.forEach((item) =>
+		arrOfDropObj.push({ label: item, value: item, testID: item + uuidv4() })
+	)
 	return arrOfDropObj
 }
 
@@ -468,6 +470,8 @@ const AddNewOutfit = () => {
 									setItems={setCategoryItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={`value` + uuidv4()}
 									onOpen={onCategoryOpen}
 								/>
 							</View>
@@ -490,6 +494,8 @@ const AddNewOutfit = () => {
 									setItems={setSeasonItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={`value` + uuidv4()}
 									onOpen={onSeasonOpen}
 								/>
 							</View>
@@ -512,6 +518,8 @@ const AddNewOutfit = () => {
 									setItems={setBlazerItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={`value` + uuidv4()}
 									onOpen={onBlazerOpen}
 								/>
 							</View>
@@ -534,6 +542,8 @@ const AddNewOutfit = () => {
 									setItems={setCardiganItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={`value` + uuidv4()}
 									onOpen={onCardiganOpen}
 								/>
 							</View>
@@ -556,6 +566,8 @@ const AddNewOutfit = () => {
 									setItems={setTopItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={`value` + uuidv4()}
 									onOpen={onTopOpen}
 								/>
 							</View>
@@ -578,6 +590,8 @@ const AddNewOutfit = () => {
 									setItems={setPantsItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={'value' + uuidv4()}
 									onOpen={onPantsOpen}
 								/>
 							</View>
