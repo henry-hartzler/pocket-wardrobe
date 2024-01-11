@@ -111,8 +111,6 @@ const AddNewOutfit = () => {
 							`There was an error retrieving the image url from the database: ${error}`
 						)
 					})
-
-				console.log(currentImgUrl)
 			}
 		} catch (e: any) {
 			Alert.alert(`Error Uploading Image: ${e.message}`)
@@ -415,36 +413,41 @@ const AddNewOutfit = () => {
 							alignItems: 'center',
 						}}
 					/>
+					<BottomSheet
+						isVisible={bottomSheetVisible}
+						onBackdropPress={() => setBottomSheetVisible(false)}
+						containerStyle={styles.bottomSheet}
+						backdropStyle={{ backgroundColor: 'white' }}
+					>
+						<View
+							style={{
+								flex: 1,
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<Image
+								style={{ height: 500, width: 300 }}
+								source={{ uri: currentImgUrl }}
+								PlaceholderContent={<ActivityIndicator />}
+								resizeMode='contain'
+							/>
 
+							<FAB
+								visible
+								icon={{
+									name: 'close',
+									type: 'font-awesome',
+									color: 'black',
+								}}
+								color='white'
+								size='large'
+								onPress={() => setBottomSheetVisible(false)}
+							/>
+						</View>
+					</BottomSheet>
 					<ScrollView>
 						<View style={styles.innerContainer}>
-							<BottomSheet
-								isVisible={bottomSheetVisible}
-								onBackdropPress={() => setBottomSheetVisible(false)}
-								containerStyle={styles.bottomSheet}
-								backdropStyle={{ backgroundColor: 'white' }}
-							>
-								{currentImgUrl && (
-									<Image
-										style={{ height: 500, width: 300, marginVertical: 20 }}
-										source={{ uri: currentImgUrl }}
-										PlaceholderContent={<ActivityIndicator />}
-									/>
-								)}
-
-								<FAB
-									visible
-									icon={{
-										name: 'close',
-										type: 'font-awesome',
-										color: 'black',
-									}}
-									color='white'
-									size='large'
-									onPress={() => setBottomSheetVisible(false)}
-								/>
-							</BottomSheet>
-
 							<View
 								style={{
 									marginVertical: 20,
@@ -645,6 +648,11 @@ const styles = StyleSheet.create({
 		width: 'auto',
 		flex: 1,
 		paddingTop: 50,
+	},
+	imageStyle: {
+		height: '100%',
+		width: '100%',
+		flex: 1,
 	},
 })
 
