@@ -649,11 +649,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingTop: 50,
 	},
-	imageStyle: {
-		height: '100%',
-		width: '100%',
-		flex: 1,
-	},
 })
 
 export default AddNewOutfit
