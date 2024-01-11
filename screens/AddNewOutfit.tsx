@@ -443,6 +443,7 @@ const AddNewOutfit = () => {
 								color='white'
 								size='large'
 								onPress={() => setBottomSheetVisible(false)}
+								style={{ marginTop: 20 }}
 							/>
 						</View>
 					</BottomSheet>
