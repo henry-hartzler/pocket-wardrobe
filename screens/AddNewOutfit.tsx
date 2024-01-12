@@ -77,7 +77,6 @@ const AddNewOutfit = () => {
 	const [loading, setLoading] = useState<boolean>(false)
 
 	const [uploadImageSuccess, setUploadImageSuccess] = useState<boolean>(false)
-	const [imgPath, setImgPath] = useState<string | undefined>(undefined)
 
 	const [currentImgUrl, setCurrentImgUrl] = useState<string | undefined>(
 		undefined
@@ -101,7 +100,7 @@ const AddNewOutfit = () => {
 				const { uri } = cameraResponse.assets[0]
 				const fileName = uri.split('/').pop() + uuidv4()
 				await uploadToFirebaseStorage(uri, fileName, (v: any) => console.log(v))
-				setImgPath(fileName)
+
 				setUploadImageSuccess(true)
 
 				getDownloadURL(ref(firebaseStorage, `outfitImages/${fileName}`))
@@ -133,7 +132,7 @@ const AddNewOutfit = () => {
 				const { uri } = mediaLibraryResponse.assets[0]
 				const fileName = uri.split('/').pop() + uuidv4()
 				await uploadToFirebaseStorage(uri, fileName, (v: any) => console.log(v))
-				setImgPath(fileName)
+
 				setUploadImageSuccess(true)
 
 				getDownloadURL(ref(firebaseStorage, `outfitImages/${fileName}`))
@@ -155,7 +154,7 @@ const AddNewOutfit = () => {
 
 	const deleteCurrentPhoto = async () => {
 		try {
-			await deleteImageFile(imgPath)
+			await deleteImageFile(currentImgUrl)
 		} catch {
 			Alert.alert(
 				'There was an error deleting the current image from the database'
@@ -256,7 +255,6 @@ const AddNewOutfit = () => {
 		setCardiganValue(null)
 		setTopValue(null)
 		setPantsValue(null)
-		setImgPath(undefined)
 		setCurrentImgUrl(undefined)
 		setUploadImageSuccess(false)
 	}
