@@ -245,7 +245,7 @@ const AddNewOutfit = () => {
 		cardigan: cardiganValue,
 		top: topValue,
 		pants: pantsValue,
-		img: imgPath,
+		img: currentImgUrl,
 		userId: currentUserId,
 	}
 
@@ -257,6 +257,7 @@ const AddNewOutfit = () => {
 		setTopValue(null)
 		setPantsValue(null)
 		setImgPath(undefined)
+		setCurrentImgUrl(undefined)
 		setUploadImageSuccess(false)
 	}
 
