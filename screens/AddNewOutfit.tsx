@@ -263,7 +263,7 @@ const AddNewOutfit = () => {
 	const uploadNewOutfit = async () => {
 		try {
 			const docRef = await addDoc(
-				collection(firebaseDb, 'outfits'),
+				collection(firebaseDb, `outfits${currentUserId}`),
 				outfitToUpload
 			)
 			Alert.alert('Outfit Upload Success!')
