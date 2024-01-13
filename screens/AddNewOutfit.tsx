@@ -246,6 +246,7 @@ const AddNewOutfit = () => {
 		pants: pantsValue,
 		img: currentImgUrl,
 		userId: currentUserId,
+		dateUploaded: new Date().toISOString(),
 	}
 
 	const resetOptions = () => {
