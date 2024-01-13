@@ -1,6 +1,6 @@
-import { Alert, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { Text } from '@rneui/themed'
+import { Image, Text, Tile } from '@rneui/themed'
 import { firebaseAuth, firebaseDb } from '../firebaseConfig'
 import {
 	collection,
@@ -44,10 +44,16 @@ const Profile = () => {
 		}
 	}, [])
 
-
 	return (
 		<View style={styles.container}>
-			<Text>{allOutfits.length > 0 ? allOutfits.length : 'No data yet'}</Text>
+			{allOutfits.length > 0 ? (
+				<Tile
+					imageProps={{ resizeMode: 'contain' }}
+					imageSrc={{ uri: allOutfits[0].img }}
+				/>
+			) : (
+				<ActivityIndicator />
+			)}
 		</View>
 	)
 }
