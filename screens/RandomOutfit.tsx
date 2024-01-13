@@ -1,6 +1,6 @@
-import { Text, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import React from 'react'
-import { Layout } from '@ui-kitten/components'
+import { Layout, Text } from '@ui-kitten/components'
 
 const RandomOutfit = () => {
 	return (

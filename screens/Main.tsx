@@ -2,14 +2,9 @@ import { StyleSheet, View, Platform } from 'react-native'
 import Constants from 'expo-constants'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import {
-	BottomNavigation,
-	BottomNavigationTab,
-	Layout,
-	Text,
-} from '@ui-kitten/components'
+import { BottomNavigation, BottomNavigationTab } from '@ui-kitten/components'
 import { User, onAuthStateChanged } from 'firebase/auth'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Login from './Login'
 import RandomOutfit from './RandomOutfit'
 import { firebaseAuth } from '../firebaseConfig'
@@ -102,6 +97,7 @@ const Main = () => {
 const styles = StyleSheet.create({
 	bottomNavigation: {
 		marginVertical: 8,
+		paddingBottom: 10,
 	},
 })
 

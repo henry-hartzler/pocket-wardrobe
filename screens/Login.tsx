@@ -26,7 +26,7 @@ const Login = () => {
 
 	const styles = useStyleSheet(themedStyles)
 
-	const PasswordIcon = (props) => (
+	const PasswordIcon = (props: any) => (
 		<TouchableWithoutFeedback
 			onPress={() => setPasswordVisible(!passwordVisible)}
 		>
@@ -43,9 +43,8 @@ const Login = () => {
 		setLoading(true)
 		try {
 			const response = await signInWithEmailAndPassword(auth, email, password)
-			console.log(response)
+			
 		} catch (error: any) {
-			console.log(error)
 			alert(`Sign in failed: ${error.message}`)
 		} finally {
 			setLoading(false)
@@ -61,9 +60,7 @@ const Login = () => {
 				password
 			)
 			alert('Sign-up successful')
-			console.log(response)
 		} catch (error: any) {
-			console.log(error)
 			alert(`Sign up failed: ${error.message}`)
 		} finally {
 			setLoading(false)

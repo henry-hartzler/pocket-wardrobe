@@ -1,23 +1,53 @@
 import React from 'react'
 import { Icon, IconElement } from '@ui-kitten/components'
 
-export const PersonIcon = (props): IconElement => (
+const PersonIcon = (props: any): IconElement => (
 	<Icon
 		{...props}
 		name='person-outline'
 	/>
 )
 
-export const ShuffleIcon = (props): IconElement => (
+const ShuffleIcon = (props: any): IconElement => (
 	<Icon
 		{...props}
 		name='shuffle-2-outline'
 	/>
 )
 
-export const PlusIcon = (props): IconElement => (
+const PlusIcon = (props: any): IconElement => (
 	<Icon
 		{...props}
 		name='plus-circle-outline'
 	/>
 )
+
+const CameraIcon = (props: any): IconElement => (
+	<Icon
+		{...props}
+		name='camera-outline'
+	/>
+)
+
+const ImageIcon = (props: any): IconElement => (
+	<Icon
+		{...props}
+		name='image-outline'
+	/>
+)
+
+const CheckmarkIcon = (props: any): IconElement => (
+	<Icon
+		{...props}
+		name='checkmark-cirlce-2-outline'
+	/>
+)
+
+export {
+	PersonIcon,
+	ShuffleIcon,
+	PlusIcon,
+	CameraIcon,
+	ImageIcon,
+	CheckmarkIcon,
+}
