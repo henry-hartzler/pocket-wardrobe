@@ -29,8 +29,6 @@ const firebaseAuth = getAuth(firebaseApp)
 const firebaseDb = getFirestore(firebaseApp)
 const firebaseStorage = getStorage(firebaseApp)
 
-const currentUserId = firebaseAuth.currentUser?.uid
-
 const uploadToFirebaseStorage = async (
 	uri: string,
 	fileName: string | null | undefined,
@@ -84,5 +82,4 @@ export {
 	firebaseStorage,
 	uploadToFirebaseStorage,
 	deleteImageFile,
-	currentUserId
 }
