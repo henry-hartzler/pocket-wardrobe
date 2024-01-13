@@ -1,15 +1,60 @@
-import { StyleSheet } from 'react-native'
-import React from 'react'
-import { firebaseAuth } from '../firebaseConfig'
-import { RouterProps } from '../types'
-import { Layout, Button, Text } from '@ui-kitten/components'
+import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Image, Text, Tile } from '@rneui/themed'
+import { firebaseAuth, firebaseDb } from '../firebaseConfig'
+import {
+	collection,
+	query,
+	where,
+	onSnapshot,
+	orderBy,
+	doc,
+	getDocs,
+} from 'firebase/firestore'
+import { Outfit } from '../types'
 
-const Profile = ({ navigation }: RouterProps) => {
+const Profile = () => {
+	const [allOutfits, setAllOutfits] = useState<Outfit[]>([])
+	const currentUserId = firebaseAuth.currentUser?.uid
+
+	const q = query(
+		collection(firebaseDb, `outfits${currentUserId}`),
+		orderBy('dateUploaded', 'desc')
+	)
+
+	const getAllOutfits = async () => {
+		const querySnapshot = await getDocs(q)
+		const outfits: Outfit[] = []
+		querySnapshot.forEach((doc) => {
+			// doc.data() is never undefined for query doc snapshots
+			// console.log(doc.id, ' => ', doc.data())
+			outfits.push(doc.data() as Outfit)
+		})
+		setAllOutfits(outfits)
+	}
+
+	useEffect(() => {
+		console.log(`start: ${allOutfits.length}`)
+		try {
+			getAllOutfits()
+		} catch {
+			Alert.alert('There was an error retrieving outfit data.')
+		} finally {
+			console.log(`end: ${allOutfits.length}`)
+		}
+	}, [])
+
 	return (
-		<Layout style={styles.container}>
-			<Text>Profile</Text>
-			<Button onPress={() => firebaseAuth.signOut()}>Logout</Button>
-		</Layout>
+		<View style={styles.container}>
+			{allOutfits.length > 0 ? (
+				<Tile
+					imageProps={{ resizeMode: 'contain' }}
+					imageSrc={{ uri: allOutfits[0].img }}
+				/>
+			) : (
+				<ActivityIndicator />
+			)}
+		</View>
 	)
 }
 
@@ -18,6 +63,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+		backgroundColor: 'white',
 	},
 })
 

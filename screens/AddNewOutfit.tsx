@@ -36,9 +36,11 @@ import { Outfit } from '../types'
 
 const makeOptions = (strArr: string[]): ItemType<ValueType>[] => {
 	const arrOfDropObj: ItemType<ValueType>[] = [
-		{ label: 'select', value: undefined, testID: uuidv4() },
+		{ label: 'select', value: undefined, testID: 'select' + uuidv4() },
 	]
-	strArr.forEach((item) => arrOfDropObj.push({ label: item, value: item }))
+	strArr.forEach((item) =>
+		arrOfDropObj.push({ label: item, value: item, testID: item + uuidv4() })
+	)
 	return arrOfDropObj
 }
 
@@ -75,7 +77,6 @@ const AddNewOutfit = () => {
 	const [loading, setLoading] = useState<boolean>(false)
 
 	const [uploadImageSuccess, setUploadImageSuccess] = useState<boolean>(false)
-	const [imgPath, setImgPath] = useState<string | undefined>(undefined)
 
 	const [currentImgUrl, setCurrentImgUrl] = useState<string | undefined>(
 		undefined
@@ -99,7 +100,7 @@ const AddNewOutfit = () => {
 				const { uri } = cameraResponse.assets[0]
 				const fileName = uri.split('/').pop() + uuidv4()
 				await uploadToFirebaseStorage(uri, fileName, (v: any) => console.log(v))
-				setImgPath(fileName)
+
 				setUploadImageSuccess(true)
 
 				getDownloadURL(ref(firebaseStorage, `outfitImages/${fileName}`))
@@ -131,7 +132,7 @@ const AddNewOutfit = () => {
 				const { uri } = mediaLibraryResponse.assets[0]
 				const fileName = uri.split('/').pop() + uuidv4()
 				await uploadToFirebaseStorage(uri, fileName, (v: any) => console.log(v))
-				setImgPath(fileName)
+
 				setUploadImageSuccess(true)
 
 				getDownloadURL(ref(firebaseStorage, `outfitImages/${fileName}`))
@@ -153,7 +154,7 @@ const AddNewOutfit = () => {
 
 	const deleteCurrentPhoto = async () => {
 		try {
-			await deleteImageFile(imgPath)
+			await deleteImageFile(currentImgUrl)
 		} catch {
 			Alert.alert(
 				'There was an error deleting the current image from the database'
@@ -243,8 +244,9 @@ const AddNewOutfit = () => {
 		cardigan: cardiganValue,
 		top: topValue,
 		pants: pantsValue,
-		img: imgPath,
+		img: currentImgUrl,
 		userId: currentUserId,
+		dateUploaded: new Date().toISOString(),
 	}
 
 	const resetOptions = () => {
@@ -254,14 +256,14 @@ const AddNewOutfit = () => {
 		setCardiganValue(null)
 		setTopValue(null)
 		setPantsValue(null)
-		setImgPath(undefined)
+		setCurrentImgUrl(undefined)
 		setUploadImageSuccess(false)
 	}
 
 	const uploadNewOutfit = async () => {
 		try {
 			const docRef = await addDoc(
-				collection(firebaseDb, 'outfits'),
+				collection(firebaseDb, `outfits${currentUserId}`),
 				outfitToUpload
 			)
 			Alert.alert('Outfit Upload Success!')
@@ -468,6 +470,8 @@ const AddNewOutfit = () => {
 									setItems={setCategoryItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={`value` + uuidv4()}
 									onOpen={onCategoryOpen}
 								/>
 							</View>
@@ -490,6 +494,8 @@ const AddNewOutfit = () => {
 									setItems={setSeasonItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={`value` + uuidv4()}
 									onOpen={onSeasonOpen}
 								/>
 							</View>
@@ -512,6 +518,8 @@ const AddNewOutfit = () => {
 									setItems={setBlazerItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={`value` + uuidv4()}
 									onOpen={onBlazerOpen}
 								/>
 							</View>
@@ -534,6 +542,8 @@ const AddNewOutfit = () => {
 									setItems={setCardiganItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={`value` + uuidv4()}
 									onOpen={onCardiganOpen}
 								/>
 							</View>
@@ -556,6 +566,8 @@ const AddNewOutfit = () => {
 									setItems={setTopItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={`value` + uuidv4()}
 									onOpen={onTopOpen}
 								/>
 							</View>
@@ -578,6 +590,8 @@ const AddNewOutfit = () => {
 									setItems={setPantsItems}
 									containerStyle={styles.dropdownContainerStyle}
 									placeholder='select'
+									listMode='SCROLLVIEW'
+									itemKey={'value' + uuidv4()}
 									onOpen={onPantsOpen}
 								/>
 							</View>
