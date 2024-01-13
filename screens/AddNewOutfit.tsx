@@ -15,6 +15,7 @@ import {
 	firebaseAuth,
 	firebaseStorage,
 	deleteImageFile,
+	currentUserId,
 } from '../firebaseConfig'
 import { ref, getDownloadURL } from 'firebase/storage'
 import { collection, addDoc } from 'firebase/firestore'
@@ -234,8 +235,6 @@ const AddNewOutfit = () => {
 		setCardiganOpen(false)
 		setTopOpen(false)
 	}, [])
-
-	const currentUserId = firebaseAuth.currentUser?.uid
 
 	const outfitToUpload: Outfit = {
 		category: categoryValue,
