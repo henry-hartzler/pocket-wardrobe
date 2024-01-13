@@ -1,12 +1,12 @@
-import { StyleSheet } from 'react-native'
-import React from 'react'
-import { Layout, Text } from '@ui-kitten/components'
+import { StyleSheet, View } from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {Text } from '@rneui/themed'
 
 const Profile = () => {
 	return (
-		<Layout style={styles.container}>
+		<View style={styles.container}>
 			<Text>Profile</Text>
-		</Layout>
+		</View>
 	)
 }
 
