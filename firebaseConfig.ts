@@ -61,8 +61,13 @@ const uploadToFirebaseStorage = async (
 	})
 }
 
-const deleteImageFile = async (imgPath: string | undefined) => {
-	if (imgPath) {
+const deleteImageFile = async (imgUrl: string | undefined) => {
+	if (imgUrl) {
+		const startIdx = imgUrl.indexOf('%2F') //%2F is converted to '/' in browser
+		const endIdx = imgUrl.indexOf('?')
+
+		const imgPath = imgUrl.substring(startIdx + 3, endIdx)
+
 		const imageRef = ref(firebaseStorage, `outfitImages/${imgPath}`)
 
 		// Delete the file
