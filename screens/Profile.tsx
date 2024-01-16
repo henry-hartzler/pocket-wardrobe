@@ -1,17 +1,16 @@
-import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, Alert, StyleSheet, View, FlatList } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { Image, Text, Tile } from '@rneui/themed'
+import { Image, Text } from '@rneui/themed'
 import { firebaseAuth, firebaseDb } from '../firebaseConfig'
 import {
 	collection,
 	query,
-	where,
-	onSnapshot,
 	orderBy,
-	doc,
 	getDocs,
 } from 'firebase/firestore'
 import { Outfit } from '../types'
+import { Tile } from '@rneui/base'
+import { uuidv4 } from '@firebase/util'
 
 const Profile = () => {
 	const [allOutfits, setAllOutfits] = useState<Outfit[]>([])
@@ -44,13 +43,14 @@ const Profile = () => {
 		}
 	}, [])
 
+	function renderItem({ item }) {
+		return <Tile imageProps={{resizeMode: 'contain'}} imageSrc={{uri: item.img}} />
+	}
+
 	return (
 		<View style={styles.container}>
 			{allOutfits.length > 0 ? (
-				<Tile
-					imageProps={{ resizeMode: 'contain' }}
-					imageSrc={{ uri: allOutfits[0].img }}
-				/>
+				<FlatList data={allOutfits} renderItem={renderItem} keyExtractor={item => item.userId + uuidv4()} />
 			) : (
 				<ActivityIndicator />
 			)}

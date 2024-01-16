@@ -1,7 +1,6 @@
 {
 	"name": "pocket-wardrobe",
 	"version": "1.0.0",
-	"type": "module",
 	"main": "node_modules/expo/AppEntry.js",
 	"scripts": {
 		"ts:check": "tsc",
