@@ -71,14 +71,28 @@ const Profile = () => {
 				<FlatList
 					data={allOutfits}
 					renderItem={renderItem}
-					keyExtractor={(item) => item.userId + uuidv4()}
+					keyExtractor={(item) => item.outfitId + uuidv4()}
 				/>
 			) : (
 				<>
-					<ActivityIndicator />
+					<ActivityIndicator
+						color='blue'
+						size='large'
+						style={{ marginBottom: 20 }}
+					/>
 					<Button
-						title='Sync Outfits'
-						onPress={() => getAllOutfits()}
+						title='SYNC OUTFITS'
+						icon={{
+							name: 'refresh',
+							type: 'font-awesome',
+							size: 15,
+							color: 'white',
+						}}
+						iconContainerStyle={styles.iconContainerStyle}
+						titleStyle={styles.titleStyle}
+						buttonStyle={styles.buttonStyle}
+						containerStyle={styles.individualButtonsContainer}
+						onPress={getAllOutfits}
 					/>
 				</>
 			)}
@@ -93,6 +107,18 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		backgroundColor: 'white',
 	},
+	individualButtonsContainer: {
+		width: 250,
+		marginHorizontal: 10,
+	},
+	buttonStyle: {
+		backgroundColor: 'blue',
+		borderColor: 'transparent',
+		borderWidth: 0,
+		borderRadius: 30,
+	},
+	titleStyle: { fontWeight: '700' },
+	iconContainerStyle: { marginRight: 10 },
 })
 
 export default Profile
