@@ -17,7 +17,7 @@ import {
 	deleteImageFile,
 } from '../firebaseConfig'
 import { ref, getDownloadURL } from 'firebase/storage'
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, addDoc, setDoc, doc } from 'firebase/firestore'
 import { uuidv4 } from '@firebase/util'
 import {
 	Button,
@@ -73,7 +73,10 @@ const seasonOptions = makeOptions(seasonsArr)
 
 const categoryOptions = makeOptions(categoryArr)
 
+//main app screen
 const AddNewOutfit = () => {
+	const currentUserId = firebaseAuth.currentUser?.uid
+
 	const [loading, setLoading] = useState<boolean>(false)
 
 	const [uploadImageSuccess, setUploadImageSuccess] = useState<boolean>(false)
@@ -81,6 +84,8 @@ const AddNewOutfit = () => {
 	const [currentImgUrl, setCurrentImgUrl] = useState<string | undefined>(
 		undefined
 	)
+
+	const [outfitId, setOutfitId] = useState<string | undefined>(undefined)
 
 	const [cameraPermission, requestCameraPermission] =
 		ImagePicker.useCameraPermissions()
@@ -103,18 +108,20 @@ const AddNewOutfit = () => {
 
 				setUploadImageSuccess(true)
 
+				setOutfitId(uuidv4())
+
 				getDownloadURL(ref(firebaseStorage, `outfitImages/${fileName}`))
 					.then((url) => {
 						setCurrentImgUrl(url)
 					})
-					.catch((error: any) => {
+					.catch((e) => {
 						Alert.alert(
-							`There was an error retrieving the image url from the database: ${error}`
+							`There was an error retrieving the image url from the database`
 						)
 					})
 			}
-		} catch (e: any) {
-			Alert.alert(`Error Uploading Image: ${e.message}`)
+		} catch (e) {
+			Alert.alert(`Error Uploading Image`)
 		} finally {
 			setLoading(false)
 		}
@@ -135,18 +142,20 @@ const AddNewOutfit = () => {
 
 				setUploadImageSuccess(true)
 
+				setOutfitId(uuidv4())
+
 				getDownloadURL(ref(firebaseStorage, `outfitImages/${fileName}`))
 					.then((url) => {
 						setCurrentImgUrl(url)
 					})
-					.catch((error: any) => {
+					.catch((e) => {
 						Alert.alert(
-							`There was an error retrieving the image url from the database: ${error}`
+							`There was an error retrieving the image url from the database`
 						)
 					})
 			}
-		} catch (e: any) {
-			Alert.alert(`Error Uploading Image: ${e.message}`)
+		} catch (e) {
+			Alert.alert(`Error Uploading Image`)
 		} finally {
 			setLoading(false)
 		}
@@ -235,8 +244,6 @@ const AddNewOutfit = () => {
 		setTopOpen(false)
 	}, [])
 
-	const currentUserId = firebaseAuth.currentUser?.uid
-
 	const outfitToUpload: Outfit = {
 		category: categoryValue,
 		season: seasonValue,
@@ -246,6 +253,7 @@ const AddNewOutfit = () => {
 		pants: pantsValue,
 		img: currentImgUrl,
 		userId: currentUserId,
+		outfitId: outfitId,
 		dateUploaded: new Date().toISOString(),
 	}
 
@@ -263,12 +271,13 @@ const AddNewOutfit = () => {
 	const uploadNewOutfit = async () => {
 		try {
 			const docRef = await addDoc(
-				collection(firebaseDb, `outfits${currentUserId}`),
+				collection(firebaseDb, 'outfits'),
 				outfitToUpload
 			)
 			Alert.alert('Outfit Upload Success!')
-		} catch (e: any) {
-			Alert.alert('Error adding document: ', e)
+		} catch (e) {
+			Alert.alert('Error uploading document')
+			deleteCurrentPhoto()
 		} finally {
 			setLoading(false)
 			resetOptions()
