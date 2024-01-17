@@ -67,6 +67,20 @@ const Profile = () => {
 
 	return (
 		<View style={styles.container}>
+			<Button
+				title='SYNC OUTFITS'
+				icon={{
+					name: 'refresh',
+					type: 'font-awesome',
+					size: 15,
+					color: 'white',
+				}}
+				iconContainerStyle={styles.iconContainerStyle}
+				titleStyle={styles.titleStyle}
+				buttonStyle={styles.buttonStyle}
+				containerStyle={styles.individualButtonsContainer}
+				onPress={getAllOutfits}
+			/>
 			{allOutfits.length > 0 ? (
 				<FlatList
 					data={allOutfits}
@@ -74,27 +88,10 @@ const Profile = () => {
 					keyExtractor={(item) => item.outfitId + uuidv4()}
 				/>
 			) : (
-				<>
-					<ActivityIndicator
-						color='blue'
-						size='large'
-						style={{ marginBottom: 20 }}
-					/>
-					<Button
-						title='SYNC OUTFITS'
-						icon={{
-							name: 'refresh',
-							type: 'font-awesome',
-							size: 15,
-							color: 'white',
-						}}
-						iconContainerStyle={styles.iconContainerStyle}
-						titleStyle={styles.titleStyle}
-						buttonStyle={styles.buttonStyle}
-						containerStyle={styles.individualButtonsContainer}
-						onPress={getAllOutfits}
-					/>
-				</>
+				<ActivityIndicator
+					color='blue'
+					size='large'
+				/>
 			)}
 		</View>
 	)
@@ -109,7 +106,7 @@ const styles = StyleSheet.create({
 	},
 	individualButtonsContainer: {
 		width: 250,
-		marginHorizontal: 10,
+		marginHorizontal: 20,
 	},
 	buttonStyle: {
 		backgroundColor: 'blue',
