@@ -12,6 +12,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore'
 import { Outfit } from '../types'
 import { Tile } from '@rneui/base'
 import { uuidv4 } from '@firebase/util'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 function sortFunc(a: string, b: string) {
 	return a > b ? 1 : a > b ? -1 : 0
@@ -66,7 +67,7 @@ const Profile = () => {
 	}
 
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<Button
 				title='SYNC OUTFITS'
 				icon={{
@@ -93,7 +94,7 @@ const Profile = () => {
 					size='large'
 				/>
 			)}
-		</View>
+		</SafeAreaView>
 	)
 }
 
